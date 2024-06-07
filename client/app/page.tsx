@@ -1,9 +1,9 @@
-import Image from "next/image";
-import Login from "./login/page";
+import Navbar from "@/app/components/Navbar";
 
 export default function Home() {
   return (
     <main>
+      <Navbar></Navbar>
     </main>
   );
 }
