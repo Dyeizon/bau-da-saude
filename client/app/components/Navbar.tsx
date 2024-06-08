@@ -53,7 +53,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
     <Disclosure as="nav" className={`${CSS.navBgColor}`}>
       {({ open }) => (
         <>
-          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 mb-2">
+          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 mb-6">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
@@ -76,13 +76,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
                   />
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
-                  <div className="flex space-x-4">
+                  <div className="flex space-x-2">
                     {navigation.map((item) => (
                       <button
                         key={item.name}
                         className={classNames(
                         item.current ? `${CSS.bgColorCurrent}` : ` hover:${CSS.bgColorHover}`,
-                          `${CSS.textColor} rounded-md px-3 py-2 text-sm font-medium transition ease-out`
+                          `${CSS.textColor} rounded-md px-5 py-2 text-sm font-medium transition ease-out`
                         )}
                         aria-current={item.current ? 'page' : undefined}
                         onClick={() => handleNavigationClick(item.name)}
