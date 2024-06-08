@@ -12,18 +12,23 @@ import {
 } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon, UserIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react';
+import { MyExams } from './MyExams';
+import { Graphs } from './Graphs';
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Navbar() {
+interface NavbarProps {
+  onData: (data: JSX.Element) => void;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
   const [profileImg, setProfileImg] = useState();
 
   const [navigation, setNavigation] = useState([
-    { name: 'Meus exames', href: '#', current: true },
-    { name: 'Relatórios', href: '#', current: false },
-    { name: 'Gráficos', href: '#', current: false },
+    { name: 'Meus exames', current: true, component: <MyExams/> },
+    { name: 'Gráficos', current: false, component: <Graphs/> },
   ]);
 
   const handleNavigationClick = (name: any) => {
@@ -31,16 +36,24 @@ export default function Navbar() {
       item.name === name ? { ...item, current: true } : { ...item, current: false }
     );
     setNavigation(updatedNavigation);
+
+    const currentItem = updatedNavigation.find(item => item.current);
+
+    if (currentItem) {
+        onData(currentItem.component);
+    } else {
+      onData(<></>)
+    }
   };
   
-  const [CSS, setCSS] = useState({navBgColor: 'bg-green-700', bgColorCurrent: 'bg-green-600', bgColorHover: 'bg-green-600', textColor: 'text-white'});
+  const CSS = {navBgColor: 'bg-green-700', bgColorCurrent: 'bg-green-600', bgColorHover: 'bg-green-600', textColor: 'text-white'};
   //"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
 
   return (
     <Disclosure as="nav" className={`${CSS.navBgColor}`}>
       {({ open }) => (
         <>
-          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 mb-2">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
@@ -65,9 +78,8 @@ export default function Navbar() {
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <a
+                      <button
                         key={item.name}
-                        href={item.href}
                         className={classNames(
                         item.current ? `${CSS.bgColorCurrent}` : ` hover:${CSS.bgColorHover}`,
                           `${CSS.textColor} rounded-md px-3 py-2 text-sm font-medium transition ease-out`
@@ -76,7 +88,7 @@ export default function Navbar() {
                         onClick={() => handleNavigationClick(item.name)}
                       >
                         {item.name}
-                      </a>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -160,8 +172,7 @@ export default function Navbar() {
               {navigation.map((item) => (
                 <DisclosureButton
                   key={item.name}
-                  as="a"
-                  href={item.href}
+                  as="button"
                   className={classNames(
                     item.current ? `${CSS.bgColorCurrent}` : `hover:${CSS.bgColorHover}`,
                     `${CSS.textColor} block rounded-md px-3 py-2 text-base font-medium`
