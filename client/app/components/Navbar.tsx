@@ -14,6 +14,7 @@ import { Bars3Icon, BellIcon, XMarkIcon, UserIcon } from '@heroicons/react/24/ou
 import { useState } from 'react';
 import { MyExams } from './MyExams';
 import { Graphs } from './Graphs';
+import { CSS } from '../page';
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
@@ -46,8 +47,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
     }
   };
   
-  const CSS = {navBgColor: 'bg-green-700', bgColorCurrent: 'bg-green-600', bgColorHover: 'bg-green-600', textColor: 'text-white'};
-  //"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+    //"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
 
   return (
     <Disclosure as="nav" className={`${CSS.navBgColor}`}>
@@ -57,7 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
-                <DisclosureButton className={`relative inline-flex items-center justify-center rounded-md p-2 text-white hover:${CSS.bgColorHover} hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white`}>
+                <DisclosureButton className={`relative inline-flex items-center justify-center rounded-md p-2 text-white ${CSS.bgColorHover} hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white`}>
                   <span className="absolute -inset-0.5" />
                   <span className="sr-only">Abrir menu principal</span>
                   {open ? (
@@ -81,7 +81,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
                       <button
                         key={item.name}
                         className={classNames(
-                        item.current ? `${CSS.bgColorCurrent}` : ` hover:${CSS.bgColorHover}`,
+                        item.current ? `${CSS.bgColorCurrent}` : `${CSS.bgColorHover}`,
                           `${CSS.textColor} rounded-md px-5 py-2 text-sm font-medium transition ease-out`
                         )}
                         aria-current={item.current ? 'page' : undefined}
@@ -174,7 +174,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
                   key={item.name}
                   as="button"
                   className={classNames(
-                    item.current ? `${CSS.bgColorCurrent}` : `hover:${CSS.bgColorHover}`,
+                    item.current ? `${CSS.bgColorCurrent}` : `${CSS.bgColorHover}`,
                     `${CSS.textColor} block rounded-md px-3 py-2 text-base font-medium`
                   )}
                   aria-current={item.current ? 'page' : undefined}
