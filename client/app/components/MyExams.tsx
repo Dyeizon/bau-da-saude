@@ -1,4 +1,4 @@
-import { CSS } from "../page";
+import { CSS } from "../utils";
 import { NewExamForm } from "./NewExamForm";
 import { ExamsList } from "./ExamsList";
 import { ExamItem } from "./ExamItem";

@@ -14,7 +14,7 @@ import { Bars3Icon, BellIcon, XMarkIcon, UserIcon } from '@heroicons/react/24/ou
 import { useState } from 'react';
 import { MyExams } from './MyExams';
 import { Graphs } from './Graphs';
-import { CSS } from '../page';
+import { CSS } from '../utils';
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')

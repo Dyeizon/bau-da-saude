@@ -1,0 +1,1 @@
+export const CSS = {navBgColor: 'bg-green-700', bgColorCurrent: 'bg-green-600', bgColorHover: 'hover:bg-green-600', textColor: 'text-white'};
