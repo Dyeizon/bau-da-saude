@@ -1,13 +1,49 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Register() {
+    const [name, setName] = useState("");
+    const [cpf, setCpf] = useState("");
+    const [dataNasc, setDataNasc] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    
+    const [showDateInput, setShowDateInput] = useState(false);
+
+    const dateInputRef = useRef(null);
     const router = useRouter();
+
+    const handleDateSelect = () => {
+        setShowDateInput(true);
+    };
+
+    const handleBlur = () => {
+        setShowDateInput(false);
+    };
+
+    const handleClickOutside = (event) => {
+        if (dateInputRef.current && !dateInputRef.current.contains(event.target) && dataNasc === "") {
+            setShowDateInput(false);
+        }
+    };
+
+    const formatDate = (dateString) => {
+        const [year, month, day] = dateString.split("-");
+        return `${day}/${month}/${year}`;
+    };
+
+    useEffect(() => {
+        if (showDateInput) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [showDateInput]);
 
     return (
         <section className="gradient-form h-full bg-neutral-200 dark:bg-neutral-700">
@@ -21,36 +57,80 @@ export default function Register() {
 
                         <div
                         className="flex items-center lg:w-6/12"
-                        style={{background: 'linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593)'}}>
-                        <div className="px-4 py-6 text-white md:mx-6 md:p-12">
+                        style={{backgroundImage: 'url("/bau_register.jpg")', backgroundSize: 'cover'}}>
+                        <div className="px-4 py-6 text-white md:mx-6 md:p-20">
                             <h4 className="mb-6 text-xl font-semibold">
-                            We are more than just a company
+                            Sem saúde não vivemos, apenas sobrevivemos!
                             </h4>
                             <p className="text-sm">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit, sed do eiusmod tempor incididunt ut labore et
-                            dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip ex
-                            ea commodo consequat.
+                            Chegamos ao mercado com o melhor de nós para os nossos clientes! Viemos com o propósito de lhe oferecer um local seguro e confiável para armazenar seus exames médicos!
                             </p>
                         </div>
                         </div>
 
                         <div className="m-auto px-4 md:px-0 lg:w-6/12">
-                        <div className="md:mx-6 md:p-12">
+                        <div className="md:mx-6 md:p-6">
                             <div className="text-center">
                             <img
-                                className="mx-auto w-48"
-                                src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
+                                className="mx-auto w-36"
+                                src="./bau.jpg"
                                 alt="logo" />
-                            <h4 className="mb-12 mt-1 pb-1 text-xl font-semibold">
+                            <h4 className="mb-6 mt-1 pb-1 text-xl font-semibold">
                                 Baú da Saúde
                             </h4>
                             </div>
 
                             <form>
-                            <p className="mb-4">Faça login na sua conta</p>
-                            <div className="relative mb-4" data-twe-input-wrapper-init>
+                            <p className="mb-4">Registre-se já em nosso sistema!</p>
+                            <div className="relative mb-3" data-twe-input-wrapper-init>
+                                <input
+                                type="text"
+                                className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0"
+                                id="name"
+                                placeholder="Name"
+                                value={name}
+                                onChange={e => setName(e.target.value)}/>
+                                
+                                <label
+                                htmlFor="name"
+                                className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${name ? '-translate-y-[0.9rem] scale-[0.8] text-primary' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary'}peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
+                                >Nome</label>
+                            </div>
+                            
+                            <div className="relative mb-3" data-twe-input-wrapper-init>
+                                {/* Input de Data de Nascimento */}
+                                {!showDateInput && (
+                                    <input
+                                        type="text"
+                                        className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0"
+                                        id="dataNasc"
+                                        placeholder="DataNasc"
+                                        value={dataNasc ? formatDate(dataNasc) : ""}
+                                        onFocus={handleDateSelect} // Chama a função quando o campo de entrada de data é focado
+                                        onChange={e => setDataNasc(e.target.value)}
+                                    />
+                                )}
+                                {/* Input de tipo date que será exibido após selecionar a data de nascimento */}
+                                {showDateInput && (
+                                    <input
+                                        type="date"
+                                        ref={dateInputRef}
+                                        className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0"
+                                        id="dataNascInput"
+                                        value={dataNasc}
+                                        onChange={e => setDataNasc(e.target.value)}
+                                    />
+                                )}
+                                {/* Rótulo "Data de Nascimento" */}
+                                <label
+                                    htmlFor="dataNasc"
+                                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${dataNasc || showDateInput ? '-translate-y-[0.9rem] scale-[0.8] text-primary' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary'} peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
+                                >
+                                    Data de Nascimento
+                                </label>
+                            </div>
+
+                            <div className="relative mb-3" data-twe-input-wrapper-init>
                                 <input
                                 type="email"
                                 className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0"
@@ -65,7 +145,7 @@ export default function Register() {
                                 >Email</label>
                             </div>
 
-                            <div className="relative mb-4" data-twe-input-wrapper-init>
+                            <div className="relative mb-3" data-twe-input-wrapper-init>
                                 <input
                                 type="password"
                                 className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0"
@@ -79,24 +159,23 @@ export default function Register() {
                                 >Senha
                                 </label>
                             </div>
-                            <div className="mb-12 pb-1 pt-1 text-center">
+                            <div className="mb-6 pb-1 pt-1 text-center">
                                 <button
                                 className="mb-3 inline-block w-full rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-dark-3 transition duration-150 ease-in-out hover:shadow-dark-2 focus:shadow-dark-2 focus:outline-none focus:ring-0 active:shadow-dark-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
                                 type="button"
                                 data-twe-ripple-init
                                 data-twe-ripple-color="light"
-                                style={{background: 'linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593)'}}>
+                                style={{background: 'linear-gradient(to right, #a6f696, #40962f, #40962f, #a6f696)'}}>
                                 Entrar
                                 </button>
-                                <a href="#!">Esqueceu a senha?</a>
                             </div>
 
                             <div className="flex items-center pb-6">
                                 <p className="mb-0 me-2">Já tem uma conta?</p>
                                 <button
                                 type="button"
-                                style={{background: 'lightblue'}}
-                                className="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-danger-50/50 hover:text-danger-600 focus:border-danger-600 focus:bg-danger-50/50 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-rose-950 dark:focus:bg-rose-950"
+                                style={{background: 'darkgreen'}}
+                                className="inline-block rounded border-0 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-danger-50/50 hover:text-danger-600 focus:border-danger-600 focus:bg-danger-50/50 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-rose-950 dark:focus:bg-rose-950"
                                 data-twe-ripple-init
                                 data-twe-ripple-color="light"
                                 onClick={e => router.push('/login')}>
@@ -111,6 +190,6 @@ export default function Register() {
                 </div>
                 </div>
             </div>
-            </section>
+        </section>
     );
 }
