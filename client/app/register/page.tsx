@@ -174,7 +174,7 @@ export default function Register() {
                                 <p className="mb-0 me-2">Já tem uma conta?</p>
                                 <button
                                 type="button"
-                                style={{background: 'darkgreen'}}
+                                style={{background: 'darkgreen', color: 'white'}}
                                 className="inline-block rounded border-0 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-danger-50/50 hover:text-danger-600 focus:border-danger-600 focus:bg-danger-50/50 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-rose-950 dark:focus:bg-rose-950"
                                 data-twe-ripple-init
                                 data-twe-ripple-color="light"
