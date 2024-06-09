@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect, useRef, RefObject } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Register() {
     const [name, setName] = useState<string>("");
-    const [cpf, setCpf] = useState<string>("");
     const [dataNasc, setDataNasc] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -16,10 +15,6 @@ export default function Register() {
 
     const handleDateSelect = () => {
         setShowDateInput(true);
-    };
-
-    const handleBlur = () => {
-        setShowDateInput(false);
     };
 
     const handleClickOutside = (event: MouseEvent) => {
