@@ -4,6 +4,7 @@ import { useState } from "react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
+  const [state, ] = useState("");
 
   return (
     <section className="h-screen w-screen" style={{backgroundImage: 'url("/bau_background.png")', backgroundSize: 'cover'}}>
