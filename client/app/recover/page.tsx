@@ -10,25 +10,22 @@ export default function Login() {
   return (
     <section className="h-screen w-screen" style={{backgroundImage: 'url("/bau_background.png")', backgroundSize: 'cover'}}>
       <div className="flex h-full flex-wrap items-center justify-center text-neutral-800 dark:text-neutral-200">
-        <div className="block bg-white dark:bg-neutral-800 rounded-lg shadow-lg">
-          <div className="lg:flex lg:flex-wrap">
+        <div className=" bg-white dark:bg-neutral-800 rounded-lg shadow-lg w-11/12 h-3/4 flex justify-center sm:w-3/4 lg:w-1/2">
+          <div className="flex">
             <div className="m-auto md:px-0">
               <div className="md:mx-6 md:p-6">
                 {!openVerifyCode ? 
                   <>
                     <div className="text-center">
                       <img className="mx-auto w-40" src="./bau.jpg" alt="logo" />
-                      <h2 className="mt-1 pb-1 text-xl font-semibold">
-                        Baú da Saúde
-                      </h2>
-                      <h3 className="mb-8 mt-1 pb-1 text-xl font-semibold">
-                        Esqueceu sua senha? Iremos lhe ajudar!
+                      <h3 className="mb-8 mt-1 pb-1 text-lg font-semibold">
+                        Esqueceu sua senha?
                       </h3>
                     </div>
                     
                     <form>
                       <p className="mb-4 text-m text-center">
-                        Por gentileza insira no campo abaixo o e-mail corresponde à conta cadastrada.<br />Lhe enviaremos um código para recuperar sua senha.
+                        Insira no campo abaixo o e-mail corresponde.<br />Lhe enviaremos um código para recuperar sua senha.
                       </p>
                       <div className="relative mb-4" data-twe-input-wrapper-init>
                         <input

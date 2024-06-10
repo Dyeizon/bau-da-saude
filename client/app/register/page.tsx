@@ -4,26 +4,26 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Register() {
-  const [name, setName] = useState("");
-  const [dataNasc, setDataNasc] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showDateInput, setShowDateInput] = useState(false);
+  const [name, setName] = useState<string>("");
+  const [dataNasc, setDataNasc] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showDateInput, setShowDateInput] = useState<boolean>(false);
 
-  const dateInputRef = useRef(null);
+  const dateInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   const handleDateSelect = () => {
     setShowDateInput(true);
   };
 
-  const handleClickOutside = (event) => {
-    if (dateInputRef.current && !dateInputRef.current.contains(event.target) && dataNasc === "") {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dateInputRef.current && !dateInputRef.current.contains(event.target as Node) && dataNasc === "") {
       setShowDateInput(false);
     }
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     const [year, month, day] = dateString.split("-");
     return `${day}/${month}/${year}`;
   };

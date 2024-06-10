@@ -1,5 +1,5 @@
 export default function VerifyScreen() {
     return (
-        <h1>HElo linda</h1>
+        <h1>verify code</h1>
     );
 }
