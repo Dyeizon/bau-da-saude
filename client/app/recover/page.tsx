@@ -10,10 +10,10 @@ export default function Login() {
   return (
     <section className="h-screen w-screen" style={{backgroundImage: 'url("/bau_background.png")', backgroundSize: 'cover'}}>
       <div className="flex h-full flex-wrap items-center justify-center text-neutral-800 dark:text-neutral-200">
-        <div className=" bg-white dark:bg-neutral-800 rounded-lg shadow-lg w-11/12 h-3/4 flex justify-center sm:w-3/4 lg:w-1/2">
+        <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-lg w-11/12 h-3/4 flex justify-center sm:w-3/4 lg:w-6/12 md:w-3/4 xl:w-5/12">
           <div className="flex">
-            <div className="m-auto md:px-0">
-              <div className="md:mx-6 md:p-6">
+            <div className="m-auto px-0">
+              <div className="mx-6 p-6">
                 {!openVerifyCode ? 
                   <>
                     <div className="text-center">
