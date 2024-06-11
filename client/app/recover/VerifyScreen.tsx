@@ -32,7 +32,7 @@ export default function VerifyScreen() {
                     <input key={index} value={digit} maxLength={1}  
                     onChange={(e)=> handleChange(e.target.value, index)}
                     onKeyUp={(e)=> handleBackspaceAndEnter(e, index)}
-                    ref={(reference) => (otpBoxReference.current[index] = reference)}
+                    ref={(reference) => { otpBoxReference.current[index] = reference }}
                     className={`border w-20 h-auto text-white p-3 rounded-md block bg-black focus:border-2 focus:outline-none appearance-none`}
                     />
                 ))}
