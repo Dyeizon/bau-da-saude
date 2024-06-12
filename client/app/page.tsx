@@ -4,6 +4,7 @@ import {Navbar} from "@/app/components/Navbar";
 import { useState } from "react";
 import { MyExams } from "./components/MyExams";
 
+
 export default function Home() {
   const [currentTabElement, setCurrentTabElement] = useState(<MyExams/>);
   
