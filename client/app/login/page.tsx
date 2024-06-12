@@ -6,8 +6,32 @@ import { useRouter } from "next/navigation";
 export default function Login() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-
     const router = useRouter();
+
+    const handleLogin = async (event: React.FormEvent) => {
+        event.preventDefault();
+        try {
+            const response = await fetch('http://localhost:3001/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('token', data.token);
+                router.push('/dashboard'); // Redirecione para a página de dashboard
+            } else {
+                const errorData = await response.json();
+                alert(errorData.error);
+            }
+        } catch (error) {
+            console.error('Erro ao fazer login:', error);
+            alert('Erro ao fazer login');
+        }
+    };
 
     return (
         <section className="gradient-form h-full bg-neutral-200 dark:bg-neutral-700">
@@ -23,7 +47,7 @@ export default function Login() {
                                             <h2 className="mt-1 pb-1 text-xl font-semibold">Baú da Saúde</h2>
                                             <h3 className="mb-8 mt-1 pb-1 text-xl font-semibold">Sua saúde bem guardada!</h3>
                                         </div>
-                                        <form>
+                                        <form onSubmit={handleLogin}>
                                             <p className="mb-4">Faça login na sua conta</p>
                                             <div className="relative mb-4" data-twe-input-wrapper-init>
                                                 <input
@@ -62,7 +86,7 @@ export default function Login() {
                                             <div className="mb-8 pb-1 pt-1 text-center">
                                                 <button
                                                     className="mb-3 inline-block w-full rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-dark-3 transition duration-150 ease-in-out hover:shadow-dark-2 focus:shadow-dark-2 focus:outline-none focus:ring-0 active:shadow-dark-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
-                                                    type="button"
+                                                    type="submit"
                                                     data-twe-ripple-init
                                                     data-twe-ripple-color="light"
                                                     style={{ background: 'linear-gradient(to right, #a6f696, #40962f, #40962f, #a6f696)' }}
