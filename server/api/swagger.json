@@ -9,6 +9,11 @@
     {
       "url": "http://localhost:3001",
       "description": "Servidor local"
+    },
+
+    {
+      "url": "https://baudasaude-api.vercel.app",
+      "description": "Servidor"
     }
   ],
   "paths": {
