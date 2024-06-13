@@ -1,19 +1,19 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const User = require('../models/user');
-const { sendEmail } = require("../api/mailer");
-const jwt = require('jsonwebtoken');
 const path = require('path');
 const cors = require('cors');
-const path = require('path');
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../api/swagger.json");
 
+const { sendEmail } = require("../api/mailer");
+
+const User = require('../models/user');
 
 const app = express();
 const port = process.env.PORT || 3001; // Use a porta definida no arquivo .env ou a porta 3001 como padrão
