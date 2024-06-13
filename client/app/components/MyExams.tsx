@@ -17,7 +17,7 @@ export const MyExams: React.FC = () => {
                     </svg>
                     </button>
                 </h2>
-                <div id="accordion-newexam-body" className={`transition-all transform overflow-hidden ${openAccordion ? 'h-full' : 'hidden h-0'}`} aria-labelledby="accordion-newexam-header">
+                <div id="accordion-newexam-body" className={`transition-all transform ${openAccordion ? 'h-full' : 'hidden h-0'}`} aria-labelledby="accordion-newexam-header">
                     <NewExamForm/>
                 </div>
             </div>

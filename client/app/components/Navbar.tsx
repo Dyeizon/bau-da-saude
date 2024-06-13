@@ -15,6 +15,8 @@ import { useState } from 'react';
 import { MyExams } from './MyExams';
 import { Graphs } from './Graphs';
 import { CSS } from '../utils';
+import Profile from '../profile/page';
+import Image from 'next/image';
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
@@ -28,8 +30,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
   const [profileImg, setProfileImg] = useState();
 
   const [navigation, setNavigation] = useState([
-    { name: 'Meus exames', current: true, component: <MyExams/> },
-    { name: 'Gráficos', current: false, component: <Graphs/> },
+    { name: 'Meus exames', current: true, component: <MyExams/>, type: 'menu' },
+    { name: 'Gráficos', current: false, component: <Graphs/>, type: 'menu' },
+    { name: 'Meu perfil', current: false, component: <Profile/>, type: 'profile' },
   ]);
 
   const handleNavigationClick = (name: any) => {
@@ -69,15 +72,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Logo"
-                  />
+                  <Image src='/bau.jpg' alt='Logo' className='h-10 w-auto' width={256} height={256}/>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-2">
-                    {navigation.map((item) => (
+                    {navigation.filter((item) => item.type === 'menu').map((item) => (
                       <button
                         key={item.name}
                         className={classNames(
@@ -132,22 +131,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
                     <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <MenuItem>
                         {({ focus }) => (
-                          <a
-                            href="#"
-                            className={classNames(focus ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                          <DisclosureButton
+                            onClick={() => handleNavigationClick('Meu perfil')}
+                            className={classNames(focus ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 w-full text-left')}
                           >
                             Meu perfil
-                          </a>
-                        )}
-                      </MenuItem>
-                      <MenuItem>
-                        {({ focus }) => (
-                          <a
-                            href="#"
-                            className={classNames(focus ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Configurações
-                          </a>
+                          </DisclosureButton>
                         )}
                       </MenuItem>
                       <MenuItem>
@@ -169,7 +158,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
 
           <DisclosurePanel className="sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
-              {navigation.map((item) => (
+              {navigation.filter(item => item.type === 'menu').map((item) => (
                 <DisclosureButton
                   key={item.name}
                   as="button"
