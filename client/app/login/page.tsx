@@ -11,7 +11,7 @@ export default function Login() {
     const handleLogin = async (event: React.FormEvent) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:3001/login', {
+            const response = await fetch('https://baudasaude-api.vercel.app/auth', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -20,8 +20,11 @@ export default function Login() {
                 credentials: 'include'
             });
 
+            console.log(response)
+
             if (response.ok) {
                 const data = await response.json();
+                console.log(data)
                 localStorage.setItem('token', data.token);
                 router.push('/');
             } else {
