@@ -10,7 +10,7 @@ router.use('/users', userRouter);
 router.use('/auth', loginRouter);
 
 router.get('/', authenticateToken, (req, res) => {
-    res.send('API | Baú da Saúde');
+    res.status(200).send('API | Baú da Saúde');
 });
 
 module.exports = router;

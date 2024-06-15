@@ -1,52 +1,60 @@
 import { useRouter } from "next/navigation";
 import { useEffect, ReactNode, useState } from "react";
 
-import {jwtDecode} from "jwt-decode"; 
-
+import { fetchUrl } from "../utils";
 
 const AuthBarrier: React.FC<{children: ReactNode, reverse?: boolean}> = ({ children, reverse=false }) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    const validateToken = (token: any): boolean => {
+    const validateToken = async (token: any): Promise<boolean> => {
         try {
-            const decodedToken: any = jwtDecode(token);
-            const currentTime = Date.now() / 1000;
+            const response = await fetch(`${fetchUrl}/`, {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `${token ? `${token}`: ''}`,
+              },
+              credentials: 'include'
+            });
 
-            console.log(decodedToken);
-
-            if (decodedToken.exp && decodedToken.exp < currentTime) {
-                return false;
+            if(!response.ok) {
+              return false;
             }
+
             return true;
-        } catch (error) {
-            console.error('Error decoding or validating token:', error);
+      
+      
+          } catch (error) {
+            console.error(error);
             return false;
-        }
+          }
     };
     
     useEffect(() => {
-        const token = localStorage.getItem('token');
-
-        if(reverse) { // User is trying to access a login/register route 
-            if(validateToken(token)) { // Blocks the authenticated user from accessing those routes
-                router.push('/') 
-            } else { // User is not authenticated, proceed to the page
-                setIsLoading(false)
-            }
-
-        } else { // User is trying to access an authenticated route
-            if(!token || (token && !validateToken(token))) { // Blocks the unauthenticated user
-                router.push('/login');
-            } 
-            
-            else { // User is authenticated, proceed to the page
+        const runTokenCheck = async () => {
+            let token = localStorage.getItem('token');
+            token = token ? token?.split(' ')[1] : null;
+    
+            if(reverse) { // User is trying to access a login/register route 
+                if(await validateToken(token)) { // Blocks the authenticated user from accessing those routes
+                    router.push('/') 
+                } else { // User is not authenticated, proceed to the page
+                    setIsLoading(false)
+                }
+    
+            } else { // User is trying to access an authenticated route
+                if(!token || (token && !await validateToken(token))) { // Blocks the unauthenticated user
+                    router.push('/login');
+                } 
                 
-                setIsLoading(false);
-                
+                else { // User is authenticated, proceed to the page
+                    setIsLoading(false);                    
+                }
             }
         }
-        
+
+        runTokenCheck();
     }, []);
 
     return (

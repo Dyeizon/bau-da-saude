@@ -17,18 +17,22 @@ const Home: React.FC = () => {
 
   const test = async () => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`${fetchUrl}/users`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${localStorage.getItem('token')}`,
+            'Authorization': `${token ? `${token}`: ''}`,
         },
         credentials: 'include'
       });
 
+      if(!response.ok) {
+        throw new Error(`Error <${response.status}>`)
+      }
+
       const data = await response.json();
       console.log(data)
-
 
     } catch (error) {
       console.error(error);
