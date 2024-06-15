@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -16,27 +17,36 @@ const { sendEmail } = require("../api/mailer");
 const User = require('../models/user');
 
 const app = express();
-const port = process.env.PORT || 3001; // Use a porta definida no arquivo .env ou a porta 3001 como padrão
+const port = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 mongoose.connect(process.env.MONGODB_URI, {
 }).then(() => {
-  console.log('Connected to MongoDB');
+  console.log('Conectado ao MongoDB');
 }).catch((err) => {
-  console.error('Error connecting to MongoDB', err);
+  console.error('Erro ao conectar ao MongoDB', err);
 });
 
-app.get('/', (req, res) => {
-  res.send('API | Baú da Saúde');
-});
+const authenticateToken = (req, res, next) => {
+  const token = req.cookies.token;
 
-app.post("/users", async (req, res) => {
+  if (token == null) return res.status(401).send({ error: 'Token não fornecido' });
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+      if (err) return res.status(403).send({ error: 'Token inválido' });
+      req.user = user;
+      next();
+  });
+};
+
+app.post("/users", authenticateToken, async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10); // Hash da senha antes de salvar no banco de dados
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User({ name, email, password: hashedPassword });
     await user.save();
@@ -59,7 +69,6 @@ app.post("/users", async (req, res) => {
       );
   } catch (error) {
     if (error.code === 11000) {
-      // Código de erro 11000 é para duplicidade de chave
       res.status(400).send("Usuário já existe.");
     } else {
       res.status(400).send(error.message);
@@ -86,7 +95,7 @@ app.get("/confirm/:token", async (req, res) => {
   }
 });
 
-app.get('/users', async (req, res) => {
+app.get('/users', authenticateToken, async (req, res) => {
   try {
     const users = await User.find();
     res.status(200).send(users);
@@ -95,57 +104,33 @@ app.get('/users', async (req, res) => {
   }
 });
 
-app.get('/users/:id', async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    
-    if (!user) {
-      return res.status(404).send();
-    }
-
-    res.status(200).send(user);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
-app.get('/users/email/:email', async (req, res) => {
-  try {
-    const user = await User.findOne({ email: req.params.email });
-    
-    if (!user) {
-      return res.status(404).send();
-    }
-
-    res.status(200).send(user);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
 app.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+      const { email, password } = req.body;
+      const user = await User.findOne({ email });
 
-    if (!user) {
-      return res.status(404).send({ error: 'User not found' });
-    }
+      if (!user) {
+          return res.status(404).send({ error: 'Usuário não encontrado' });
+      }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+      const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordValid) {
-      return res.status(401).send({ error: 'Invalid credentials' });
-    }
+      if (!isPasswordValid) {
+          return res.status(401).send({ error: 'Credenciais inválidas' });
+      }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    res.status(200).send({ token });
+      res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+      res.status(200).send({ message: 'Login bem-sucedido' });
   } catch (error) {
-    res.status(500).send(error);
+      res.status(500).send(error);
   }
 });
 
+app.get('/', authenticateToken, (req, res) => {
+  res.send('API | Baú da Saúde');
+});
 
 app.post("/forgot-password", async (req, res) => {
   const { email } = req.body;
@@ -161,7 +146,7 @@ app.post("/forgot-password", async (req, res) => {
     const resetLink = `http://localhost:3001/users/reset-password/${token}`;
 
     user.resetPasswordToken = token;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    user.resetPasswordExpires = Date.now() + 3600000;
     await user.save();
 
     await sendEmail(
@@ -234,5 +219,4 @@ app.listen(port, () => {
   console.log(`API em ExpressJS, porta ${port}`);
 });
 
-// Exporta o aplicativo para que funcione com Vercel
-module.exports = app;
+module.exports = app; //exporta o app para o Vercel
