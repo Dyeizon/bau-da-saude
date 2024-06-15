@@ -22,11 +22,14 @@ function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
+import { useRouter } from "next/navigation";
+
 interface NavbarProps {
   onData: (data: JSX.Element) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
+  const router = useRouter();
   const [profileImg, setProfileImg] = useState();
 
   const [navigation, setNavigation] = useState([
@@ -141,12 +144,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
                       </MenuItem>
                       <MenuItem>
                         {({ focus }) => (
-                          <a
-                            href="#"
-                            className={classNames(focus ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Desconectar
-                          </a>
+                          <DisclosureButton
+                          onClick={() => {localStorage.clear(); router.push('/login')}}
+                          className={classNames(focus ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 w-full text-left')}
+                        >
+                          Desconectar
+                        </DisclosureButton>
                         )}
                       </MenuItem>
                     </MenuItems>
