@@ -1,1 +1,2 @@
 export const CSS = {navBgColor: 'bg-green-700', bgColorCurrent: 'bg-green-600', bgColorHover: 'hover:bg-green-600', textColor: 'text-white'};
+export const fetchUrl = process.env.NODE_ENV === 'production' ? 'https://baudasaude-api.vercel.app' : 'http://localhost:3001'

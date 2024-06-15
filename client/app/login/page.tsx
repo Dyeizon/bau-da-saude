@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { fetchUrl } from "../utils";
+
 export default function Login() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -10,8 +12,9 @@ export default function Login() {
 
     const handleLogin = async (event: React.FormEvent) => {
         event.preventDefault();
+
         try {
-            const response = await fetch('https://baudasaude-api.vercel.app/auth', {
+            const response = await fetch(`${fetchUrl}/auth`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
