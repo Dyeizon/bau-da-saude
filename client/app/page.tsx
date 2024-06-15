@@ -1,10 +1,12 @@
 'use client';
 
 import {Navbar} from "@/app/components/Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MyExams } from "./components/MyExams";
 
 import AuthBarrier from "./login/AuthBarrier";
+import { fetchUrl } from "./utils";
+
 
 const Home: React.FC = () => {
   const [currentTabElement, setCurrentTabElement] = useState(<MyExams/>);
@@ -12,6 +14,30 @@ const Home: React.FC = () => {
   const handleDataFromNavbar = (navData: any) => {
     setCurrentTabElement(navData);
   }
+
+  const test = async () => {
+    try {
+      const response = await fetch(`${fetchUrl}/users`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('token')}`,
+        },
+        credentials: 'include'
+      });
+
+      const data = await response.json();
+      console.log(data)
+
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    test();
+  }, [])
 
   return (
     <AuthBarrier>

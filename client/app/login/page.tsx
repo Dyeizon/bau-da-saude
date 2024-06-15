@@ -24,11 +24,8 @@ export default function Login() {
                 credentials: 'include'
             });
 
-            console.log(response)
-
             if (response.ok) {
                 const data = await response.json();
-                console.log(data)
                 localStorage.setItem('token', data.token);
                 router.push('/');
             } else {
