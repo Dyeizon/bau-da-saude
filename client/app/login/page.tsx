@@ -16,13 +16,14 @@ export default function Login() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ email, password }),
+                credentials: 'include'
             });
 
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem('token', data.token);
-                router.push('/dashboard'); // Redirecione para a página de dashboard
+                router.push('/');
             } else {
                 const errorData = await response.json();
                 alert(errorData.error);
