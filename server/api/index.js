@@ -6,6 +6,7 @@ require('./dbconnection');
 
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+
 const cors = require('cors');
 
 const cookieParser = require('cookie-parser');
