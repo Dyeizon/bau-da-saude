@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
   
         res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-        res.status(200).send({ message: {'token': token} });
+        res.status(200).send({ token: token });
     } catch (error) {
         res.status(500).send(error);
     }
