@@ -16,17 +16,24 @@ export default function Register() {
   const dateInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
+  const stringToDate = (dateString: string) => {
+    const [year, month, day] = dateString.split("-");
+
+    return new Date(parseInt(year), parseInt(month)-1, parseInt(day));
+  }
+
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    
+
     (async function async() {
       try {
+        const dateFormated = stringToDate(dataNasc);
         const response = await fetch(`${fetchUrl}/users`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name, email, password }),
+            body: JSON.stringify({ name, email, password, dateFormated }),
             credentials: 'include'
         });
 
@@ -39,7 +46,7 @@ export default function Register() {
             alert(errorData.error);
         }
     } catch (error) {
-        console.error('Erro no cadastro:', error);
+        console.log('Erro no cadastro:', error);
         alert('Erro no cadastro');
     }
     })();
@@ -60,11 +67,7 @@ export default function Register() {
     return `${day}/${month}/${year}`;
   };
 
-  const stringToDate = (dateString: string) => {
-    const [year, month, day] = dateString.split("-");
-
-    return new Date(parseInt(year), parseInt(month)-1, parseInt(day));
-  }
+  
 
   useEffect(() => {
     if (showDateInput) {
