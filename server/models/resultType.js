@@ -5,6 +5,11 @@ const resultTypeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
+  measures: {
+    type: String,
+    required: true,
+  }
 });
 
 const ResultType = mongoose.model('ResultType', resultTypeSchema, 'resultType');

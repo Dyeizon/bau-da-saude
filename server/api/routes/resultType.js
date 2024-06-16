@@ -8,9 +8,9 @@ const ResultType = require('../../models/resultType')
 
 router.post('/', async (req, res) => {
     try {
-        const { name } = req.body;
+        const { name, measures } = req.body;
     
-        const resultType = new ResultType({ name });
+        const resultType = new ResultType({ name, measures });
         await resultType.save();
         res.status(200).send("Tipo de resultado cadastrado!");
   
