@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import AuthBarrier from "../login/AuthBarrier";
 
+import { fetchUrl } from "../utils";
+
 export default function Register() {
   const [name, setName] = useState<string>("");
   const [dataNasc, setDataNasc] = useState<string>("");
@@ -13,6 +15,35 @@ export default function Register() {
 
   const dateInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+
+  const handleFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    
+    (async function async() {
+      try {
+        const response = await fetch(`${fetchUrl}/users`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, email, password }),
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem('token', data.token);
+            router.push('/');
+        } else {
+            const errorData = await response.json();
+            alert(errorData.error);
+        }
+    } catch (error) {
+        console.error('Erro no cadastro:', error);
+        alert('Erro no cadastro');
+    }
+    })();
+  }
 
   const handleDateSelect = () => {
     setShowDateInput(true);
@@ -28,6 +59,12 @@ export default function Register() {
     const [year, month, day] = dateString.split("-");
     return `${day}/${month}/${year}`;
   };
+
+  const stringToDate = (dateString: string) => {
+    const [year, month, day] = dateString.split("-");
+
+    return new Date(parseInt(year), parseInt(month)-1, parseInt(day));
+  }
 
   useEffect(() => {
     if (showDateInput) {
@@ -70,7 +107,7 @@ export default function Register() {
                         </h4>
                       </div>
 
-                      <form>
+                      <form onSubmit={event => handleFormSubmit(event)}>
                         <p className="mb-4">Registre-se já em nosso sistema!</p>
                         <div className="relative mb-3" data-twe-input-wrapper-init>
                           <input
@@ -95,7 +132,7 @@ export default function Register() {
                               type="text"
                               className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0"
                               id="dataNasc"
-                              placeholder="DataNasc"
+                              placeholder=""
                               value={dataNasc ? formatDate(dataNasc) : ""}
                               onFocus={handleDateSelect}
                               onChange={e => setDataNasc(e.target.value)}
@@ -143,7 +180,7 @@ export default function Register() {
                             id="password"
                             placeholder="Senha"
                             value={password}
-                            onChange={e => setEmail(e.target.value)}
+                            onChange={e => setPassword(e.target.value)}
                           />
                           <label
                             htmlFor="password"
@@ -155,12 +192,12 @@ export default function Register() {
                         <div className="mb-6 pb-1 pt-1 text-center">
                           <button
                             className="mb-3 inline-block w-full rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-dark-3 transition duration-150 ease-in-out hover:shadow-dark-2 focus:shadow-dark-2 focus:outline-none focus:ring-0 active:shadow-dark-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
-                            type="button"
+                            type="submit"
                             data-twe-ripple-init
                             data-twe-ripple-color="light"
                             style={{background: 'linear-gradient(to right, #a6f696, #40962f, #40962f, #a6f696)'}}
                           >
-                            Entrar
+                            Cadastrar
                           </button>
                         </div>
 
