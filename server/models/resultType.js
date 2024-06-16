@@ -6,7 +6,7 @@ const resultTypeSchema = new mongoose.Schema({
     required: true,
   },
 
-  measures: {
+  measure: {
     type: String,
     required: true,
   }
