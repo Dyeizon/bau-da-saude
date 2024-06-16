@@ -44,9 +44,7 @@ router.post("/", async (req, res) => {
   
       res
         .status(201)
-        .send(
-          "Usuário registrado com sucesso. Verifique seu email para confirmar o cadastro."
-        );
+        .send({ token: `Bearer ${token}`, message: "Usuário registrado com sucesso. Verifique seu email para confirmar o cadastro." });
     } catch (error) {
       if (error.code === 11000) {
         res.status(400).send("Usuário já existe.");
