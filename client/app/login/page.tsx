@@ -10,11 +10,15 @@ export default function Login() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [emailError, setEmailError] = useState<string | null>(null);
+    const [passwordError, setPasswordError] = useState<string | null>(null);
     const router = useRouter();
 
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setIsLoading(true); // Inicia o estado de carregamento
+        setIsLoading(true);
+        setEmailError(null);
+        setPasswordError(null);
 
         try {
             const response = await fetch(`${fetchUrl}/auth`, {
@@ -29,16 +33,23 @@ export default function Login() {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem('token', data.token);
-                router.push('/'); // Redireciona para a página principal após o login
+                router.push('/');
             } else {
                 const errorData = await response.json();
-                alert(errorData.error); // Exibe um alerta com o erro retornado pelo servidor
+                console.log(errorData);
+                if (errorData.error === 'Usuário não encontrado') {
+                    setEmailError('Usuário não encontrado');
+                } else if (errorData.error === 'Credenciais inválidas') {
+                    setPasswordError('Credenciais inválidas');
+                } else {
+                    setEmailError('Erro ao fazer login');
+                }
             }
         } catch (error) {
             console.error('Erro ao fazer login:', error);
-            alert('Erro ao fazer login'); // Exibe um alerta genérico de erro em caso de falha na requisição
+            setEmailError('Erro ao fazer login');
         } finally {
-            setIsLoading(false); // Finaliza o estado de carregamento após a conclusão da requisição
+            setIsLoading(false);
         }
     };
 
@@ -62,35 +73,35 @@ export default function Login() {
                                                 <div className="relative mb-4" data-twe-input-wrapper-init>
                                                     <input
                                                         type="email"
-                                                        className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none focus:outline-none focus:border-none focus:ring-0 transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0"
+                                                        className={`peer block min-h-[auto] w-full rounded ${emailError ? 'border-red-500' : 'border-0'} bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none focus:outline-none focus:ring-0 transition-all duration-200 ease-linear ${email ? 'focus:placeholder:opacity-100 peer-focus:text-primary' : ''} dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary`}
                                                         id="email"
-                                                        placeholder="Email"
                                                         value={email}
                                                         onChange={e => setEmail(e.target.value)}
                                                     />
                                                     <label
                                                         htmlFor="email"
-                                                        className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${email ? '-translate-y-[0.9rem] scale-[0.8] text-primary' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary'} peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
+                                                        className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${emailError ? 'text-red-500 bg-white bg-' : 'text-neutral-400'} ${email ? '-translate-y-[0.9rem] scale-[0.8] text-primary bg-white' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary bg-transparent'} peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
                                                     >
                                                         Email
                                                     </label>
+                                                    {emailError && <p className="text-red-500 text-xs mt-1">{emailError}</p>}
                                                 </div>
 
                                                 <div className="relative mb-4" data-twe-input-wrapper-init>
                                                     <input
                                                         type="password"
-                                                        className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none focus:outline-none focus:border-none focus:ring-0 transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0"
+                                                        className={`peer block min-h-[auto] w-full rounded ${passwordError ? 'border-red-500' : 'border-0'} bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none focus:outline-none focus:ring-0 transition-all duration-200 ease-linear ${password ? 'focus:placeholder:opacity-100 peer-focus:text-primary' : ''} dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary`}
                                                         id="password"
-                                                        placeholder="Senha"
                                                         value={password}
                                                         onChange={e => setPassword(e.target.value)}
                                                     />
                                                     <label
                                                         htmlFor="password"
-                                                        className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${password ? '-translate-y-[0.9rem] scale-[0.8] text-primary' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary'} peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
+                                                        className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${password ? '-translate-y-[0.9rem] scale-[0.8] text-primary bg-white' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary bg-transparent'} ${passwordError ? 'border-red-500 text-red-500' : 'border-0'} peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
                                                     >
                                                         Senha
                                                     </label>
+                                                    {passwordError && <p className="text-red-500 text-xs mt-1">{passwordError}</p>}
                                                 </div>
 
                                                 <div className="mb-8 pb-1 pt-1 text-center">
