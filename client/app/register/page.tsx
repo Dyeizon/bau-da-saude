@@ -89,20 +89,9 @@ export default function Register() {
             <div className="w-full">
               <div className="block bg-white dark:bg-neutral-800">
                 <div className="h-screen g-0 lg:flex lg:flex-wrap">
-
-                  <div className="flex items-center lg:w-6/12" style={{backgroundImage: 'url("/bau_register.jpg")', backgroundSize: 'cover'}}>
-                    <div className="px-4 py-6 text-white md:mx-6 md:p-20">
-                      <h4 className="mb-6 text-xl font-semibold">
-                        Sem saúde não vivemos, apenas sobrevivemos!
-                      </h4>
-                      <p className="text-sm">
-                        Chegamos ao mercado com o melhor de nós para os nossos clientes! Viemos com o propósito de lhe oferecer um local seguro e confiável para armazenar seus exames médicos!
-                      </p>
-                    </div>
-                  </div>
-
+                  <div className="flex items-center lg:w-6/12" style={{backgroundImage: 'url("/bau_register.jpg")', backgroundSize: 'cover'}}></div>
                   <div className="m-auto px-4 md:px-0 lg:w-6/12">
-                    <div className="md:mx-6 md:p-6">
+                    <div className="md:mx-6 md:p-12">
                       <div className="text-center">
                         <img className="mx-auto w-36" src="./bau.jpg" alt="logo" />
                         <h4 className="mb-6 mt-1 pb-1 text-xl font-semibold">
@@ -110,9 +99,9 @@ export default function Register() {
                         </h4>
                       </div>
 
-                      <form onSubmit={event => handleFormSubmit(event)}>
+                      <form onSubmit={handleFormSubmit}>
                         <p className="mb-4">Registre-se já em nosso sistema!</p>
-                        <div className="relative mb-3" data-twe-input-wrapper-init>
+                        <div className="relative mb-6" data-twe-input-wrapper-init>
                           <input
                             type="text"
                             className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none focus:outline-none focus:border-none focus:ring-0 transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0"
@@ -123,13 +112,13 @@ export default function Register() {
                           />
                           <label
                             htmlFor="name"
-                            className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${name ? '-translate-y-[0.9rem] scale-[0.8] text-primary' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary'}peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
+                            className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${name ? '-translate-y-[0.9rem] scale-[0.8] text-primary bg-white rounded px-2' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-focus:bg-white peer-focus:rounded peer-focus:px-2'} peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
                           >
                             Nome
                           </label>
                         </div>
 
-                        <div className="relative mb-3" data-twe-input-wrapper-init>
+                        <div className="relative mb-6" data-twe-input-wrapper-init>
                           {!showDateInput && (
                             <input
                               type="text"
@@ -153,13 +142,13 @@ export default function Register() {
                           )}
                           <label
                             htmlFor="dataNasc"
-                            className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${dataNasc || showDateInput ? '-translate-y-[0.9rem] scale-[0.8] text-primary' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary'} peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
+                            className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${dataNasc || showDateInput ? '-translate-y-[0.9rem] scale-[0.8] text-primary bg-white rounded px-2' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-focus:bg-white peer-focus:rounded peer-focus:px-2'} peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
                           >
                             Data de Nascimento
                           </label>
                         </div>
 
-                        <div className="relative mb-3" data-twe-input-wrapper-init>
+                        <div className="relative mb-6" data-twe-input-wrapper-init>
                           <input
                             type="email"
                             className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none focus:outline-none focus:border-none focus:ring-0 transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0"
@@ -170,13 +159,13 @@ export default function Register() {
                           />
                           <label
                             htmlFor="email"
-                            className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${email ? '-translate-y-[0.9rem] scale-[0.8] text-primary' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary'} peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
+                            className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${email ? '-translate-y-[0.9rem] scale-[0.8] text-primary bg-white rounded px-2' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-focus:bg-white peer-focus:rounded peer-focus:px-2'} peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
                           >
                             Email
                           </label>
                         </div>
 
-                        <div className="relative mb-3" data-twe-input-wrapper-init>
+                        <div className="relative mb-6" data-twe-input-wrapper-init>
                           <input
                             type="password"
                             className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none focus:outline-none focus:border-none focus:ring-0 transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0"
@@ -187,7 +176,7 @@ export default function Register() {
                           />
                           <label
                             htmlFor="password"
-                            className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${password ? '-translate-y-[0.9rem] scale-[0.8] text-primary' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary'} peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
+                            className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${password ? '-translate-y-[0.9rem] scale-[0.8] text-primary bg-white rounded px-2' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-focus:bg-white peer-focus:rounded peer-focus:px-2'} peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
                           >
                             Senha
                           </label>
@@ -220,7 +209,6 @@ export default function Register() {
                       </form>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>

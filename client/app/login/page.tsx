@@ -80,7 +80,7 @@ export default function Login() {
                                                     />
                                                     <label
                                                         htmlFor="email"
-                                                        className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${emailError ? 'text-red-500 bg-white bg-' : 'text-neutral-400'} ${email ? '-translate-y-[0.9rem] scale-[0.8] text-primary bg-white' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary bg-transparent'} peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
+                                                        className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] transition-all duration-200 ease-out ${emailError ? 'text-red-500' : 'text-neutral-400'} ${email ? '-translate-y-[1rem] scale-[0.8] text-primary  bg-white rounded px-0.5' : 'peer-focus:-translate-y-[1rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-focus:bg-white px-0.5 peer-focus:rounded'} peer-data-[twe-input-state-active]:-translate-y-[1rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
                                                     >
                                                         Email
                                                     </label>
@@ -97,7 +97,7 @@ export default function Login() {
                                                     />
                                                     <label
                                                         htmlFor="password"
-                                                        className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out ${password ? '-translate-y-[0.9rem] scale-[0.8] text-primary bg-white' : 'peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary bg-transparent'} ${passwordError ? 'border-red-500 text-red-500' : 'border-0'} peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
+                                                        className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] transition-all duration-200 ease-out ${passwordError ? 'text-red-500' : 'text-neutral-400'} ${password ? '-translate-y-[1rem] scale-[0.8] text-primary bg-white rounded px-0.5' : 'peer-focus:-translate-y-[1rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-focus:bg-white px-0.5 peer-focus:rounded'} peer-data-[twe-input-state-active]:-translate-y-[1.1rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
                                                     >
                                                         Senha
                                                     </label>
