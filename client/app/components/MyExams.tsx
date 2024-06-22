@@ -24,12 +24,13 @@ export const MyExams: React.FC = () => {
 
             <ExamsList>
                 <>
-                    <ExamItem/>
-                    <ExamItem/>
-                    <ExamItem/>
-                    <ExamItem/>
-                    <ExamItem/>
-                    <ExamItem/>
+                    <ExamItem examId="123"/>
+                    <ExamItem examId="123"/>
+                    <ExamItem examId="123"/>
+                    <ExamItem examId="123"/>
+                    <ExamItem examId="123"/>
+                    <ExamItem examId="123"/>
+                    
                 </>
             </ExamsList>
         </div>

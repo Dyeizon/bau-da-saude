@@ -50,13 +50,11 @@ export const NewExamForm = () => {
     const handleSubmit = (e: any) => {
         e.preventDefault();
         console.log(inputs);
-        
     }
-
 
     return (
         <div className="border border-gray-300 rounded-lg rounded-tr-none rounded-tl-none shadow">
-            <form onSubmit={handleSubmit} className="max-w-5xl mx-auto py-8">
+            <form onSubmit={handleSubmit} className="mx-10 py-8">
                 <fieldset>
                     <legend className="mb-5">Informações do exame</legend>
                     <div className="grid md:grid-cols-3 md:gap-5">
