@@ -13,7 +13,7 @@ import {
 import { Bars3Icon, BellIcon, XMarkIcon, UserIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react';
 import { MyExams } from './MyExams';
-import { Graphs } from './Graphs';
+import { Charts } from './Charts';
 import { CSS } from '../utils';
 import Profile from '../profile/page';
 import Image from 'next/image';
@@ -34,7 +34,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
 
   const [navigation, setNavigation] = useState([
     { name: 'Meus exames', current: true, component: <MyExams/>, type: 'menu' },
-    { name: 'Gráficos', current: false, component: <Graphs/>, type: 'menu' },
+    { name: 'Gráficos', current: false, component: <Charts/>, type: 'menu' },
     { name: 'Meu perfil', current: false, component: <Profile/>, type: 'profile' },
   ]);
 
@@ -75,7 +75,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <Image src='/bau.jpg' alt='Logo' className='h-10 w-auto' width={256} height={256}/>
+                  <a href="/">
+                    <Image src='/bau.jpg' alt='Logo' className='h-10 w-auto' width={256} height={256}/>
+                  </a>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-2">
