@@ -25,7 +25,7 @@ export const ExamItem: React.FC<{examId: string}> = ({examId}) => {
                         Cancelar
                     </Button>
                     </div>
-                </div>
+                </div>  
                 </Modal.Body>
             </Modal>
             
