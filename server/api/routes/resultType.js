@@ -6,6 +6,15 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 const ResultType = require('../../models/resultType')
 
+router.get('/', async (req, res) => {
+    try {
+        const resultType = await ResultType.find();
+        res.status(200).json(resultType);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
 router.post('/', async (req, res) => {
     try {
         const { name, measure } = req.body;
