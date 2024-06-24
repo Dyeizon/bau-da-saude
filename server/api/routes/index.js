@@ -7,11 +7,13 @@ const userRouter = require('./users')
 const loginRouter = require('./auth')
 const typesRouter = require('./examType')
 const resultsTypeRouter = require('./resultType')
+const examsRouter = require('./exams')
 
 router.use('/users', userRouter);
 router.use('/auth', loginRouter);
 router.use('/types', typesRouter);
 router.use('/result-types', resultsTypeRouter);
+router.use('/exams', examsRouter);
 
 router.get('/', authenticateToken, (req, res) => {
     res.status(200).send('API | Baú da Saúde');
