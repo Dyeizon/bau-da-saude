@@ -3,6 +3,8 @@ const router = express.Router()
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require("crypto");
+
 
 const User = require('../../models/user')
 const { sendEmail } = require('./../mailer');
@@ -31,42 +33,41 @@ router.post('/', async (req, res) => {
 });
 
 router.post("/forgot-password", async (req, res) => {
-    const { email } = req.body;
-    try {
-      const user = await User.findOne({ email });
-      if (!user) {
-        return res.status(400).send("Usuário não encontrado.");
-      }
-  
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      });
-      const resetLink = `http://localhost:3001/users/reset-password/${token}`;
-  
-      user.resetPasswordToken = token;
-      user.resetPasswordExpires = Date.now() + 3600000;
-      await user.save();
-  
-      await sendEmail(
-        email,
-        "Redefinição de Senha",
-        `Você solicitou a redefinição de sua senha. Por favor, redefina sua senha clicando no link: ${resetLink}`,
-        `<p>Você solicitou a redefinição de sua senha. Por favor, redefina sua senha clicando no link: <a href="${resetLink}">Redefinir Senha</a></p>`
-      );
-  
-      res.send("Email de redefinição de senha enviado.");
-    } catch (error) {
-      res.status(400).send(error.message);
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).send("Usuário não encontrado.");
     }
+    const token = crypto.randomInt(1000, 9999).toString(); 
+    //const token = crypto.randomBytes(20).toString('hex');
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
+    await user.save();
+
+    await sendEmail(
+      email,
+      "Redefinição de Senha",
+      `Olá ${user.name}, sabemos como é importante manter sua conta segura. Use o código abaixo para redefinir sua senha e continuar aproveitando os benefícios do Baú da Saúde: ${token}`,
+      `<p>Olá <strong>${user.name}</strong>,</p>
+       <p>Sabemos como é importante manter sua conta segura. Use o código abaixo para redefinir sua senha e continuar aproveitando os benefícios do <strong>Baú da Saúde</strong>:</p>
+       <p style="font-size: 18px; font-weight: bold;">${token}</p>
+       <p>Se precisar de qualquer ajuda, nossa equipe está à disposição.</p>
+       <p>Atenciosamente,</p>
+       <p>Equipe Baú da Saúde</p>`
+    );
+
+    res.send("Código de redefinição de senha enviado.");
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 });
-  
 router.post("/reset-password/:token", async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
+
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findOne({
-      _id: decoded.id,
       resetPasswordToken: token,
       resetPasswordExpires: { $gt: Date.now() },
     });
@@ -75,14 +76,14 @@ router.post("/reset-password/:token", async (req, res) => {
       return res.status(400).send("Token inválido ou expirado.");
     }
 
-    user.password = password;
+    user.password = await bcrypt.hash(password, 10);
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
 
     res.send("Senha redefinida com sucesso!");
   } catch (error) {
-    res.status(400).send("Token inválido ou expirado.");
+    res.status(400).send(error.message);
   }
 });
 
@@ -104,5 +105,6 @@ router.get("/confirm/:token", async (req, res) => {
     res.status(400).send("Token inválido ou expirado.");
   }
 });
+
 
 module.exports = router;

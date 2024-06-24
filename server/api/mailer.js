@@ -2,10 +2,6 @@
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 const nodemailer = require("nodemailer");
-//const dotenv = require("dotenv");
-
-//dotenv.config();
-//require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 function createTransporter() {
   return nodemailer.createTransport({
@@ -15,6 +11,9 @@ function createTransporter() {
     auth: {
       user: process.env.MAIL_USER,
       pass: process.env.MAIL_PASS,
+    },
+    tls: {
+      rejectUnauthorized: false,
     },
   });
 }

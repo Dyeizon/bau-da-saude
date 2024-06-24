@@ -27,5 +27,32 @@ router.post('/', async (req, res) => {
         res.status(400).send(error.message);
     }
 });
+router.delete("/delete-resulttype", async (req, res) => {
+  const { name, id } = req.body;
+
+  if (!name && !id) {
+    return res.status(400).json({ msg: "Nome ou ID é necessário" });
+  }
+
+  try {
+    let resultType;
+    if (name) {
+      resultType = await ResultType.findOneAndDelete({ name });
+    } else if (id) {
+      resultType = await ResultType.findByIdAndDelete(id);
+    }
+
+    if (!resultType) {
+      return res.status(404).json({ msg: "Tipo de resultado não encontrado" });
+    }
+
+    res.status(200).json({ msg: "Tipo de resultado deletado com sucesso" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "Erro ao deletar tipo de resultado", error: error.message });
+  }
+});
+
   
 module.exports = router;
