@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import DatePicker, { registerLocale } from 'react-datepicker';
 import { ptBR } from 'date-fns/locale/pt-BR';
-import { fetchUrl } from "../utils";
+import { fetchUrl, CSS } from "../utils";
 import "react-datepicker/dist/react-datepicker.css";
 
 registerLocale("ptBR", ptBR);
@@ -154,96 +154,97 @@ export const NewExamForm = () => {
           <fieldset>
             <legend className="mb-5">Resultados</legend>
             <div>
-              {inputs.map((input, index) => (
-                <div className="flex gap-6" key={index}>
-                  <div className="relative z-0 w-full mb-5 group">
-                    <select
-                      required
-                      id={`result-type-${index}`}
-                      value={input.selectedName}
-                      className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                      onChange={(event) => {
-                        const newInputs = [...inputs];
-                        const selectedResult = filteredResultTypes.find(result => result.name === event.target.value);
-                        if (selectedResult) {
-                          newInputs[index].selectedName = selectedResult.name;
-                          newInputs[index].selectedMeasure = selectedResult.measure;
-                        } else {
-                          newInputs[index].selectedName = "";
-                          newInputs[index].selectedMeasure = "";
-                        }
-                        setInputs(newInputs);
-                      }}
-                    >
-                      <option value="">Selecione um resultado</option>
-                      {filteredResultTypes.map((result) => (
-                        <option key={result._id} value={result.name}>
-                          {result.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                {inputs.map((input, index) => (
+                    <div className="flex gap-6" key={index}>
+                        <div className="relative z-0 w-full mb-5 group">
+                          <select
+                            required
+                            id={`result-type-${index}`}
+                            value={input.selectedName}
+                            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            onChange={(event) => {
+                              const newInputs = [...inputs];
+                              const selectedResult = filteredResultTypes.find(result => result.name === event.target.value);
+                              if (selectedResult) {
+                                newInputs[index].selectedName = selectedResult.name;
+                                newInputs[index].selectedMeasure = selectedResult.measure;
+                              } else {
+                                newInputs[index].selectedName = "";
+                                newInputs[index].selectedMeasure = "";
+                              }
+                              setInputs(newInputs);
+                            }}
+                          >
+                            <option value="">Selecione um resultado</option>
+                            {filteredResultTypes.map((result) => (
+                              <option key={result._id} value={result.name}>
+                                {result.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        
+                        <div className="relative z-0 w-full mb-5 group">
+                            <div className="relative flex items-center">
+                                <input 
+                                    type="number" 
+                                    step={0.001}
+                                    min={0}
+                                    max={10000}
+                                    name={`result-value-${index}`} 
+                                    id={`result-value-${index}`} 
+                                    className="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 peer pr-16" 
+                                    placeholder=" " 
+                                    required 
+                                    value={input.resultValue}
+                                    onChange={(e) => {
+                                        const newInputs = [...inputs];
+                                        newInputs[index].resultValue = e.target.value;
+                                        setInputs(newInputs);
+                                    }}
+                                />
+                                <label 
+                                    htmlFor={`result-value-${index}`} 
+                                    className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                >
+                                    Valor
+                                </label>
+                                <span className="absolute right-2 text-gray-500">{input.selectedMeasure || ''}</span>
+                            </div>
+                        </div>
 
-                  <div className="relative z-0 w-full mb-5 group">
-                    <div className="relative flex items-center">
-                      <input
-                        type="number"
-                        step={0.001}
-                        min={0}
-                        max={10000}
-                        name={`result-value-${index}`}
-                        id={`result-value-${index}`}
-                        className="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" "
-                        value={input.resultValue}
-                        onChange={(event) => {
-                          const newInputs = [...inputs];
-                          newInputs[index].resultValue = event.target.value;
-                          setInputs(newInputs);
-                        }}
-                      />
-                      <label
-                        htmlFor={`result-value-${index}`}
-                        className="absolute left-2 -top-3.5 -z-10 px-1 text-xs font-medium bg-white text-gray-400 transition-all transform origin-[0] peer-focus:scale-75 peer-focus:-translate-y-6 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-x-0 peer-focus:translate-x-1/4 peer-focus:text-blue-600"
-                      >
-                        Valor
-                      </label>
-                      <span className="absolute right-4">{input.selectedMeasure}</span>
+                        
+                        <div className="relative z-0 w-20 mb-5 group">
+                            {index === inputs.length - 1 ? (
+                                <button 
+                                    type="button" 
+                                    className="text-white float-end bg-blue-500 w-full focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2 px-4 text-center"
+                                    onClick={addNewInputSet}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="size-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                </button>
+                            ) : (
+                                <button 
+                                    type="button" 
+                                    className="text-white float-end bg-red-500 w-full focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm py-2 px-4 text-center"
+                                    onClick={() => handleDelete(index)}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="size-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            )}
+                        </div>
                     </div>
-                  </div>
-
-                  {inputs.length > 1 && (
-                    <div className="relative z-0 w-full mb-5 group">
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(index)}
-                        className="block py-2.5 px-4 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="size-5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ))}
+                ))}
             </div>
 
-            <button
-              type="button"
-              onClick={addNewInputSet}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="size-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-            </button>
           </fieldset>
         )}
 
-        <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-          Salvar
-        </button>
+        <button type="submit" className={`mt-5 text-white ${CSS.navBgColor} ${CSS.bgColorHover} focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm !w-full sm:w-auto px-5 py-2.5 text-center `}>Cadastrar exame</button>
       </form>
     </div>
   );
