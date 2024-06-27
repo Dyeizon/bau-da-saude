@@ -3,14 +3,13 @@
   "info": {
     "title": "API | Baú da Saúde",
     "version": "1.0.0",
-    "description": "Documentação da API Baú da Saúde"
+    "description": "### Bem-vindo à documentação da API do Baú da Saúde\n\n#### Descrição\n\n Um serviço inovador projetado para facilitar o armazenamento, gerenciamento e acesso aos seus exames médicos de forma segura e eficiente. O Baú da Saúde é uma plataforma que visa centralizar todos os seus registros médicos em um único local, proporcionando praticidade tanto para pacientes quanto para profissionais de saúde."
   },
   "servers": [
     {
       "url": "http://localhost:3001",
       "description": "Servidor local"
     },
-
     {
       "url": "https://baudasaude-api.vercel.app",
       "description": "Servidor"
@@ -19,7 +18,7 @@
   "paths": {
     "/users": {
       "post": {
-        "summary": "Cria um novo usuário",
+        "summary": "Cadastro um novo usuário",
         "requestBody": {
           "required": true,
           "content": {
@@ -40,7 +39,12 @@
         }
       },
       "get": {
-        "summary": "Obtém todos os usuários",
+        "summary": "Listar todos os usuários",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Lista de usuários",
@@ -61,73 +65,7 @@
         }
       }
     },
-    "/users/{id}": {
-      "get": {
-        "summary": "Obtém um usuário pelo ID",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Usuário encontrado",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Usuário não encontrado"
-          },
-          "500": {
-            "description": "Erro no servidor"
-          }
-        }
-      }
-    },
-    "/users/email/{email}": {
-      "get": {
-        "summary": "Obtém um usuário pelo email",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Usuário encontrado",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Usuário não encontrado"
-          },
-          "500": {
-            "description": "Erro no servidor"
-          }
-        }
-      }
-    },
-    "/login": {
+    "/auth": {
       "post": {
         "summary": "Login de um usuário",
         "requestBody": {
@@ -135,7 +73,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Login"
+                "$ref": "#/components/schemas/auth"
               }
             }
           }
@@ -153,7 +91,7 @@
         }
       }
     },
-    "/forgot-password": {
+    "/auth/forgot-password": {
       "post": {
         "summary": "Solicita redefinição de senha",
         "requestBody": {
@@ -179,7 +117,7 @@
         }
       }
     },
-    "/reset-password/{token}": {
+    "/auth/reset-password/{token}": {
       "post": {
         "summary": "Redefine a senha do usuário",
         "parameters": [
@@ -215,28 +153,219 @@
         }
       }
     },
-    "/delete-user": {
-      "delete": {
-        "summary": "Deleta um usuário",
+    "/types": {
+      "get": {
+        "summary": "Listar todos os tipos de exames",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de exames",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExamType"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastrar um novo tipo de exame",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DeleteUser"
+                "$ref": "#/components/schemas/ExamType"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Usuário deletado com sucesso"
+            "description": "Tipo de exame cadastrado com sucesso"
           },
           "400": {
-            "description": "Email ou ID é necessário"
+            "description": "Erro no cadastro do tipo de exame"
+          }
+        }
+      }
+    },
+    "/exams": {
+      "get": {
+        "summary": "Listar todos os exames",
+        "responses": {
+          "200": {
+            "description": "Lista de exames",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Exams"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro ao buscar exames"
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastrar um novo exame",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Exams"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Exame cadastrado com sucesso"
+          },
+          "500": {
+            "description": "Erro ao cadastrar exame"
+          }
+        }
+      }
+    },
+    "/types/delete-examtype": {
+      "delete": {
+        "summary": "Deletar um tipo de exame por nome ou ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteExamType"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tipo de exame deletado com sucesso"
+          },
+          "400": {
+            "description": "Nome ou ID é necessário"
           },
           "404": {
-            "description": "Usuário não encontrado"
+            "description": "Tipo de exame não encontrado"
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      }
+    },
+    "/result-types": {
+      "get": {
+        "summary": "Listar todos os tipos de resultados",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de resultados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResultType"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastrar um novo tipo de resultado",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResultType"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tipo de resultado cadastrado com sucesso"
+          },
+          "400": {
+            "description": "Erro no cadastro do tipo de resultado"
+          }
+        }
+      }
+    },
+    "/result-types/delete-resulttype": {
+      "delete": {
+        "summary": "Deletar um tipo de resultado por nome ou ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteResultType"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tipo de resultado deletado com sucesso"
+          },
+          "400": {
+            "description": "Nome ou ID é necessário"
+          },
+          "404": {
+            "description": "Tipo de resultado não encontrado"
           },
           "500": {
             "description": "Erro no servidor"
@@ -258,10 +387,14 @@
           },
           "password": {
             "type": "string"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date"
           }
         }
       },
-      "Login": {
+      "auth": {
         "type": "object",
         "properties": {
           "email": {
@@ -288,10 +421,72 @@
           }
         }
       },
-      "DeleteUser": {
+      "ExamType": {
         "type": "object",
         "properties": {
-          "email": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ResultType": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "measures": {
+            "type": "string"
+          }
+        }
+      },
+      "Exams": {
+        "type": "object",
+        "properties": {
+          "examName": {
+            "type": "string"
+          },
+          "examDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "examType": {
+            "type": "string"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "selectedName": {
+                  "type": "string"
+                },
+                "resultValue": {
+                  "type": "string"
+                },
+                "selectedMeasure": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "DeleteExamType": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "DeleteResultType": {
+        "type": "object",
+        "properties": {
+          "name": {
             "type": "string"
           },
           "id": {
@@ -299,6 +494,18 @@
           }
         }
       }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }

@@ -1,30 +1,40 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
 
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    resetPasswordToken: String,
-    resetPasswordExpires: Date,
-  },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
 
-  password: {
-    type: String,
-    required: true,
-  },
+    password: {
+      type: String,
+      required: true,
+    },
 
-  birthDate: {
-    type: Date,
-    required: true,
-  },
+    resetPasswordToken: {
+      type: String,
+      select: false,
+    },
+    
+    resetPasswordExpires: {
+      type: Date,
+      select: false,
+    },
 
-}, {timestamps: true});
+    birthDate: {
+      type: Date,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
 
 const User = mongoose.model('User', userSchema, 'users');
 
