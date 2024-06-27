@@ -168,6 +168,11 @@ export const NewExamForm = () => {
           </div>
         </fieldset>
 
+              
+      <label htmlFor="exam_file">Enviar um arquivo</label>
+      <input name="exam-file" accept=".pdf" className="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" id="exam_file" type="file"/>
+      <p className="mt-1 mb-5 text-sm text-gray-500" id="exam_file_help">Apenas PDF com tamanho máximo de 12MB</p>
+
         {showResultSection && (
           <fieldset>
             <legend className="mb-5">Resultados</legend>
