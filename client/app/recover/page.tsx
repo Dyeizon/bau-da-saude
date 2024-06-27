@@ -1,11 +1,41 @@
 'use client';
 
+import { fetchUrl } from "../utils";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import VerifyScreen from "./VerifyScreen";
 
-export default function Login() {
+export default function Recover() {
   const [email, setEmail] = useState("");
   const [openVerifyCode, setOpenVerifyCode] = useState(false);
+  const router = useRouter();
+
+  const handleRecover = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('Iniciando recuperação de senha');
+    try {
+        const response = await fetch(`${fetchUrl}/auth/forgot-password`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email }),
+            credentials: 'include'
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Resposta recebida:', data);
+            localStorage.setItem('token', data.token);
+            setOpenVerifyCode(true);  // Abre a tela de verificação
+        } else {
+            const errorData = await response.json();
+            console.log('Erro na resposta:', errorData);
+        }
+    } catch (error) {
+        console.error('Erro ao enviar o email de recuperação:', error);
+    }
+  };
 
   return (
     <section className="h-screen w-screen" style={{backgroundImage: 'url("/bau_background.png")', backgroundSize: 'cover'}}>
@@ -23,9 +53,9 @@ export default function Login() {
                       </h3>
                     </div>
                     
-                    <form>
+                    <form onSubmit={handleRecover}>
                       <p className="mb-4 text-m text-center">
-                        Insira no campo abaixo o e-mail corresponde.<br />Lhe enviaremos um código para recuperar sua senha.
+                        Insira no campo abaixo o e-mail correspondente.<br />Lhe enviaremos um código para recuperar sua senha.
                       </p>
                       <div className="relative mb-4" data-twe-input-wrapper-init>
                         <input
@@ -47,11 +77,10 @@ export default function Login() {
                       <div className="pb-1 pt-1 text-center">
                         <button
                           className="mb-3 inline-block w-full rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-dark-3 transition duration-150 ease-in-out hover:shadow-dark-2 focus:shadow-dark-2 focus:outline-none focus:ring-0 active:shadow-dark-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
-                          type="button"
+                          type="submit"  // Alterado para "submit"
                           data-twe-ripple-init
                           data-twe-ripple-color="light"
                           style={{ background: 'linear-gradient(to right, #a6f696, #40962f, #40962f, #a6f696)' }}
-                          onClick={() => setOpenVerifyCode(true)}
                         >
                           Enviar
                         </button>

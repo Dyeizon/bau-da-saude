@@ -37,10 +37,9 @@ router.post("/forgot-password", async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).send("Usuário não encontrado.");
+      return res.status(400).json({ message: "Usuário não encontrado." });
     }
     const token = crypto.randomInt(1000, 9999).toString(); 
-    //const token = crypto.randomBytes(20).toString('hex');
     user.resetPasswordToken = token;
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
     await user.save();
@@ -57,9 +56,9 @@ router.post("/forgot-password", async (req, res) => {
        <p>Equipe Baú da Saúde</p>`
     );
 
-    res.send("Código de redefinição de senha enviado.");
+    res.json({ message: "Código de redefinição de senha enviado." });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ message: error.message });
   }
 });
 
