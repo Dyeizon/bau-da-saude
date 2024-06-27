@@ -118,8 +118,7 @@ export const NewExamForm = () => {
       <form onSubmit={handleSubmit} className="mx-10 py-8">
         <fieldset>
           <legend className="mb-5">Informações do exame</legend>
-          <div className="grid md:grid-cols
-          -3 md:gap-5">
+          <div className="grid md:grid-cols-3 md:gap-5">
             <div className="relative z-0 w-full mb-5 group">
               <input
                 type="text"
