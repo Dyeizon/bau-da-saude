@@ -32,6 +32,7 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
   const [examDate, setExamDate] = useState(new Date());
   const [examFile, setExamFile] = useState<File | null>(null);
   
+  const [hasFileError, setHasFileError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const owner = getTokenID(localStorage.getItem('token')?.split(' ')[1]);
@@ -59,6 +60,19 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
     fetchResultTypes();
   }, []);
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if(event.target.files?.[0] && event.target.files?.[0].size > 12000000) {
+        setHasFileError(true);
+        setIsLoading(false);
+        setExamFile(null);
+        return;
+      }
+
+      setExamFile(event.target.files?.[0] || null);
+      setHasFileError(false);
+
+  }
+
   const handleExamTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedTypeId = event.target.value;
     setExamType(selectedTypeId);
@@ -85,10 +99,15 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
     // Verifica se todos os campos obrigatórios estão preenchidos
     if (!examDate || !examType) {
       alert('Por favor, preencha todos os campos obrigatórios.');
+      setIsLoading(false);
       return;
     }
 
-    console.log(examFile);
+    if(hasFileError) {
+      alert('O arquivo escolhido é muito grande.');
+      setIsLoading(false);
+      return;
+    }
 
     const formData = new FormData();
     formData.append('owner', owner);
@@ -102,7 +121,7 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
       const response = await axios.post(`${fetchUrl}/exams`, formData);
       console.log("Resposta do servidor:", response.data);
     } catch (error) {
-      console.error("Erro ao cadastrar exame [FRONT]:", error);
+      console.error("Erro ao cadastrar exame:", error);
     } finally {
         onSubmit();
         setIsLoading(false);
@@ -141,8 +160,8 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
             </div>
 
             <div className="date-div relative z-10 w-full mb-5 group">
-              <label htmlFor="date-picker" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                Data do exame
+              <label htmlFor="date-picker" className="peer-focus:font-medium absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                <span className="text-red-900 font-bold">*</span><span className="text-sm">Data do exame</span> 
               </label>
               <DatePicker
                 highlightDates={[new Date()]}
@@ -176,8 +195,8 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
 
               
       <label htmlFor="exam_file">Enviar um arquivo</label>
-      <input onChange={(e) => {setExamFile(e.target.files?.[0] || null); console.log(examFile)}} name="examFile" accept=".pdf" className="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" id="exam_file" type="file"/>
-      <p className="mt-1 mb-5 text-sm text-gray-500" id="exam_file_help">Apenas PDF com tamanho máximo de 12MB</p>
+      <input onChange={(e) => handleFileChange(e)} name="examFile" accept=".pdf" className={`${hasFileError ? 'bg-red-300' : ''} mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50`} id="exam_file" type="file"/>
+      <p className={`${hasFileError ? 'text-red-700 font-bold' : ''} mt-1 mb-5 text-sm text-gray-500`} id="exam_file_help">Apenas PDF com tamanho máximo de 12MB</p>
 
         {showResultSection && (
           <fieldset>

@@ -20,8 +20,10 @@ interface Exam {
 export const MyExams: React.FC = () => {
     const [openAccordion, setOpenAccordion] = useState<boolean>(false);
     const [exams, setExams] = useState<Exam[]>([]);
+    const [isFetching, setIsFetching] = useState<boolean>(false);
 
     const fetchExams = async () => {
+        setIsFetching(true);
         const response = await fetch(`${fetchUrl}/exams/${getTokenID(localStorage.getItem('token')?.split(' ')[1])}`, {
             method: 'GET',
             headers: {
@@ -35,6 +37,7 @@ export const MyExams: React.FC = () => {
             const data = await response.json();
             setExams(data);
         }
+        setIsFetching(false);
     };  
 
     useEffect(() => {
@@ -57,13 +60,19 @@ export const MyExams: React.FC = () => {
                 </div>
             </div>
 
+            <div className={`${isFetching ? 'opacity-80' : ''}`}>
+            {exams && !isFetching && exams.length === 0 && (
+                <h1 className="text-center mt-10 px-10"><strong>Boas vindas</strong><br/>assim que você cadastrar alguns exames, eles aparecerão aqui.</h1>
+            )} 
+            
             <ExamsList>
                 <>
                     {exams.map(exam => (
-                        <ExamItem key={exam._id} info={exam}/>
+                        <ExamItem onDelete={fetchExams} key={exam._id} info={exam}/>
                     ))}
                 </>
             </ExamsList>
+            </div>
         </div>
     );
 }

@@ -1,5 +1,7 @@
 import { Modal, Button } from "flowbite-react";
 import { useState } from "react";
+import axios from "axios";
+import { fetchUrl } from "../utils";
 
 interface Exam {
     _id: string,
@@ -11,16 +13,52 @@ interface Exam {
     results: { selectedName: string, resultValue: string, selectedMeasure: string }[]
 }
 
-export const ExamItem: React.FC<{info: Exam}> = ({info}) => {
+export const ExamItem: React.FC<{info: Exam, onDelete: () => void}> = ({info, onDelete}) => {
     const date = new Date(info.date);
-    console.log(info);
 
-    const formattedDate = `${date.getDate() < 10 ? '0'+date.getDate() : date.getDate()}/${date.getMonth() < 10 ? '0'+(date.getMonth() + 1) : date.getMonth() + 1}/${date.getFullYear()}`;
+    const formattedDate = `${date.getDate() < 10 ? '0'+date.getDate() : date.getDate()}/${date.getMonth() < 9 ? '0'+(date.getMonth() + 1) : date.getMonth() + 1}/${date.getFullYear()}`;
 
     const [openModal, setOpenModal] = useState(false);
 
     const deleteExam = async (examId: string) => {
-        console.log(examId);
+        try {
+            await axios.delete(`${fetchUrl}/exams/${examId}`, {
+                headers: {
+                    Authorization: `${localStorage.getItem('token')}`
+                }
+            });
+
+            onDelete();
+
+        } catch (error) {
+            console.error('Error deleting exam:', error);
+        }
+    }
+
+    async function downloadFile(examId: string) {
+        try {
+            const response = await axios.get(`${fetchUrl}/exams/download/${examId}`, {
+                responseType: 'blob',
+                headers: {
+                    Authorization: `${localStorage.getItem('token')}`
+                }
+            });
+
+            const blob = new Blob([response.data], { type: response.headers['content-type'] });
+
+            const url = window.URL.createObjectURL(blob);
+    
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${info.type.name}-${info.date}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+    
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error('Error downloading file:', error);
+        }
     }
 
     return (
@@ -55,9 +93,9 @@ export const ExamItem: React.FC<{info: Exam}> = ({info}) => {
                     </a>
                     
                     <div>
-                        <button type="button" disabled={info.file ? false : true} className={`${info.file ? '' : 'opacity-50 cursor-not-allowed'} text-white float-end bg-green-500 w-full focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2 px-4 text-center`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        <button type="button" onClick={() => downloadFile(info._id)} disabled={info.file ? false : true} className={`${info.file ? '' : 'opacity-50 cursor-not-allowed'} text-white float-end bg-green-500 w-full focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2 px-4 text-center`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                             </svg>
                         </button>
                     </div>

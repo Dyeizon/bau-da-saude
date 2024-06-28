@@ -24,6 +24,19 @@ body {
 
 }
 
+input[type="file"]::file-selector-button {
+  background-color: rgb(5 122 85 / var(--tw-bg-opacity)); /* Tailwind's green-500 */
+  transition: all 300ms;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: #059669; /* Tailwind's green-600 */
+}
+
+input[type="file"]::file-selector-button:active {
+  background-color: #059669; /* Tailwind's green-700 */
+}
+
 @layer base {
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
