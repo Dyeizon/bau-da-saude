@@ -36,12 +36,22 @@ router.post('/', upload.single('examFile'), async (req, res) => {
     }
 });
 
-router.get('/:owner', authenticateToken, authorizeOwner, async (req, res) => {
+router.get('/owner/:owner', authenticateToken, authorizeOwner, async (req, res) => {
     try {
         const { owner } = req.params;
 
         const exams = await Exams.find({owner: owner}).populate('type').sort({date: -1});
         res.status(200).json(exams);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    try {
+        const exam = await Exams.findById(req.params.id).populate('type', 'name -_id').populate('owner', 'name -_id');
+
+        res.status(200).json(exam);
     } catch (error) {
         res.status(400).send(error.message);
     }

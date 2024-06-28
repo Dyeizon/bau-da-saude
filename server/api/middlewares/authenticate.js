@@ -11,7 +11,7 @@ const authenticateToken = (req, res, next) => {
     }
   
     if (token == null) return res.status(401).send({ error: 'Token não fornecido' });
-  
+
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) return res.status(403).send({ error: 'Token inválido' });
         req.user = user;

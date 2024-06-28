@@ -24,18 +24,27 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
   const [examTypes, setExamTypes] = useState<ExamType[]>([]);
   const [resultTypes, setResultTypes] = useState<ResultType[]>([]);
   const [filteredResultTypes, setFilteredResultTypes] = useState<ResultType[]>([]);
-  const [examType, setExamType] = useState<string>("");
-  const [inputs, setInputs] = useState<{ selectedName: string; resultValue: string; selectedMeasure: string }[]>([{ selectedName: "", resultValue: "", selectedMeasure: "" }]);
   const [showResultSection, setShowResultSection] = useState(false);
   
-  const [examName, setExamName] = useState("");
+  const [examName, setExamName] = useState<string>("");
   const [examDate, setExamDate] = useState(new Date());
+  const [examType, setExamType] = useState<string>("");
   const [examFile, setExamFile] = useState<File | null>(null);
+  const [inputs, setInputs] = useState<{ selectedName: string; resultValue: string; selectedMeasure: string }[]>([{ selectedName: "", resultValue: "", selectedMeasure: "" }]);
   
   const [hasFileError, setHasFileError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const owner = getTokenID(localStorage.getItem('token')?.split(' ')[1]);
+
+  const resetFields = () => {
+    setExamName("");
+    setExamDate(new Date());
+    setExamType("");
+    setExamFile(null);
+    setInputs([]);
+    setShowResultSection(false);
+  }
 
   useEffect(() => {
     const fetchExamTypes = async () => {
@@ -119,7 +128,11 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
   
     try {
       const response = await axios.post(`${fetchUrl}/exams`, formData);
-      console.log("Resposta do servidor:", response.data);
+      if(response.status === 200) {
+        resetFields();
+      } else {
+        console.log(response.status);
+      }
     } catch (error) {
       console.error("Erro ao cadastrar exame:", error);
     } finally {

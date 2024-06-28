@@ -23,21 +23,25 @@ export const MyExams: React.FC = () => {
     const [isFetching, setIsFetching] = useState<boolean>(false);
 
     const fetchExams = async () => {
-        setIsFetching(true);
-        const response = await fetch(`${fetchUrl}/exams/${getTokenID(localStorage.getItem('token')?.split(' ')[1])}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `${localStorage.getItem('token')?.split(' ')[1] ? `${localStorage.getItem('token')?.split(' ')[1]}`: ''}`,
-            },
-            credentials: 'include'
-        });
+        try {
+            setIsFetching(true);
+            const response = await fetch(`${fetchUrl}/exams/owner/${getTokenID(localStorage.getItem('token')?.split(' ')[1])}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+                credentials: 'include'
+            });
 
-        if (response.ok) {
-            const data = await response.json();
-            setExams(data);
+            if (response.status === 200) {
+                const data = await response.json();
+                setExams(data);
+            }
+            setIsFetching(false);
+        } catch (error) {
+            console.log(error);
         }
-        setIsFetching(false);
     };  
 
     useEffect(() => {
@@ -62,7 +66,7 @@ export const MyExams: React.FC = () => {
 
             <div className={`${isFetching ? 'opacity-80' : ''}`}>
             {exams && !isFetching && exams.length === 0 && (
-                <h1 className="text-center mt-10 px-10"><strong>Boas vindas</strong><br/>assim que você cadastrar alguns exames, eles aparecerão aqui.</h1>
+                <h1 className="text-center mt-10 px-10"><strong>Boas vindas.</strong><br/>Assim que você cadastrar alguns exames, eles aparecerão aqui.</h1>
             )} 
             
             <ExamsList>

@@ -4,10 +4,14 @@ const authorizeOwner = async (req, res, next) => {
     try {
         const { owner } = req.params;
         const user = req.user;
-   
+        
         const exams = await Exams.find({ owner: owner });
 
-        if (!exams || exams.length === 0 || exams[0].owner.toString() !== user.id) {
+        if (!exams || exams.length === 0) {
+            return res.status(204).json({ message: 'No exams found.'});
+        }
+
+        if (exams[0].owner.toString() !== user.id) {
             return res.status(403).json({ error: 'Unauthorized access' });
         }
         next();

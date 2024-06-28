@@ -1,7 +1,7 @@
 import { Modal, Button } from "flowbite-react";
 import { useState } from "react";
 import axios from "axios";
-import { fetchUrl } from "../utils";
+import { fetchUrl, formatDatePT } from "../utils";
 
 interface Exam {
     _id: string,
@@ -16,7 +16,7 @@ interface Exam {
 export const ExamItem: React.FC<{info: Exam, onDelete: () => void}> = ({info, onDelete}) => {
     const date = new Date(info.date);
 
-    const formattedDate = `${date.getDate() < 10 ? '0'+date.getDate() : date.getDate()}/${date.getMonth() < 9 ? '0'+(date.getMonth() + 1) : date.getMonth() + 1}/${date.getFullYear()}`;
+    const formattedDate = formatDatePT(date);
 
     const [openModal, setOpenModal] = useState(false);
 
