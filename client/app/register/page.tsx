@@ -24,33 +24,36 @@ export default function Register() {
 
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-
+  
     (async function async() {
       try {
-        const dateFormated = stringToDate(dataNasc);
+        const birthDate = stringToDate(dataNasc);
+        const requestBody = JSON.stringify({ name, email, password, birthDate });
+        console.log('Request body:', requestBody);
+  
         const response = await fetch(`${fetchUrl}/users`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name, email, password, dateFormated }),
-            credentials: 'include'
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: requestBody,
+          credentials: 'include'
         });
-
+  
         if (response.ok) {
-            const data = await response.json();
-            localStorage.setItem('token', data.token);
-            router.push('/');
+          const data = await response.json();
+          localStorage.setItem('token', data.token);
+          router.push('/');
         } else {
-            const errorData = await response.json();
-            alert(errorData.error);
+          const errorData = await response.json();
+          alert(errorData.error);
         }
-    } catch (error) {
+      } catch (error) {
         console.log('Erro no cadastro:', error);
         alert('Erro no cadastro');
-    }
+      }
     })();
-  }
+  }  
 
   const handleDateSelect = () => {
     setShowDateInput(true);
