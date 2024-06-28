@@ -18,7 +18,6 @@ export default function RootLayout({
     <html lang="pt-br">
       <body className={inter.className}>
         {children}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
       </body>
     </html>
   );

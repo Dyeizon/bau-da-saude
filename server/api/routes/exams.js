@@ -2,8 +2,13 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+const multer = require('multer');
 
 const Exams = require('./../../models/exams');
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
 
 router.get('/', async (req, res) => {
     try {
@@ -14,13 +19,22 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', upload.single('examFile'), async (req, res) => {
     try {
-        const { examName, examDate, examType, results } = req.body;
-  
-        console.log("Dados recebidos:", req.body);
+        const { owner, examName, examDate, examType, results } = Object.assign({}, req.body);
+
+        console.log("Dados recebidos:", Object.assign({}, req.body));
         
-        const exams = new Exams({ examName, examDate, examType, results });
+        const exams = new Exams({ 
+            owner, 
+            name: examName, 
+            date: new Date(examDate),
+            type: examType, 
+            results: JSON.parse(results), 
+            file: req.file.buffer, 
+            contentType: req.file.mimetype
+        });
+
         await exams.save();
         res.status(200).send("Exame cadastrado!");
     } catch (error) {

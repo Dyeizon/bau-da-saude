@@ -4,13 +4,16 @@ import DatePicker, { registerLocale } from 'react-datepicker';
 import { ptBR } from 'date-fns/locale/pt-BR';
 import { fetchUrl, CSS } from "../utils";
 import "react-datepicker/dist/react-datepicker.css";
+import { getTokenID } from "../utils";
 
 registerLocale("ptBR", ptBR);
 
 interface Exams {
+  owner: string,
   examName: string,
   examDate: Date,
   examType: string,
+  examFile: File | null,
   results: { selectedName: string, resultValue: string, selectedMeasure: string }[]
 }
 
@@ -34,8 +37,11 @@ export const NewExamForm = () => {
   const [inputs, setInputs] = useState<{ selectedName: string; resultValue: string; selectedMeasure: string }[]>([{ selectedName: "", resultValue: "", selectedMeasure: "" }]);
   const [showResultSection, setShowResultSection] = useState(false);
   
-  const [examDate, setExamDate] = useState(new Date());
   const [examName, setExamName] = useState("");
+  const [examDate, setExamDate] = useState(new Date());
+  const [examFile, setExamFile] = useState<File | null>(null);
+
+  const owner = getTokenID(localStorage.getItem('token')?.split(' ')[1]);
 
   useEffect(() => {
     const fetchExamTypes = async () => {
@@ -83,17 +89,29 @@ export const NewExamForm = () => {
     e.preventDefault();
   
     // Verifica se todos os campos obrigatórios estão preenchidos
-    if (!examName || !examDate || !examType || inputs.some(input => !input.selectedName || !input.resultValue)) {
+    if (!examDate || !examType) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
-  
-    const formData = {
-      examName,
-      examDate,
-      examType,
-      results: inputs
-    };
+
+    console.log(examFile);
+
+    const formData = new FormData();
+    formData.append('owner', owner);
+    formData.append('examName', examName);
+    formData.append('examDate', examDate.toISOString());
+    formData.append('examType', examType);
+    if(examFile) formData.append('examFile', examFile);
+    formData.append('results', JSON.stringify(inputs));
+
+    // {
+    //   owner: owner,
+    //   examName: examName,
+    //   examDate: examDate,
+    //   examType: examType,
+    //   examFile: examFile,
+    //   results: inputs
+    // };
   
     try {
       const response = await axios.post(`${fetchUrl}/exams`, formData);
@@ -170,7 +188,7 @@ export const NewExamForm = () => {
 
               
       <label htmlFor="exam_file">Enviar um arquivo</label>
-      <input name="exam-file" accept=".pdf" className="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" id="exam_file" type="file"/>
+      <input onChange={(e) => {setExamFile(e.target.files?.[0] || null); console.log(examFile)}} name="examFile" accept=".pdf" className="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" id="exam_file" type="file"/>
       <p className="mt-1 mb-5 text-sm text-gray-500" id="exam_file_help">Apenas PDF com tamanho máximo de 12MB</p>
 
         {showResultSection && (
