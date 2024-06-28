@@ -8,7 +8,7 @@ const ResultType = require('../../models/resultType')
 
 router.get('/', async (req, res) => {
     try {
-        const resultType = await ResultType.find();
+        const resultType = await ResultType.find().sort({ name: 1 });
         res.status(200).json(resultType);
     } catch (error) {
         res.status(400).send(error.message);
