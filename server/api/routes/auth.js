@@ -47,13 +47,12 @@ router.post("/forgot-password", async (req, res) => {
     await sendEmail(
       email,
       "Redefinição de Senha",
-      `Olá ${user.name}, sabemos como é importante manter sua conta segura. Use o código abaixo para redefinir sua senha e continuar aproveitando os benefícios do Baú da Saúde: ${token}`,
       `<p>Olá <strong>${user.name}</strong>,</p>
-       <p>Sabemos como é importante manter sua conta segura. Use o código abaixo para redefinir sua senha e continuar aproveitando os benefícios do <strong>Baú da Saúde</strong>:</p>
+       <p>Recebemos uma solicitação para um código de recuperação de senha da sua conta.<br>Use o código abaixo para redefinir sua senha e continuar aproveitando os benefícios do <strong>Baú da Saúde</strong>:</p>
        <p style="font-size: 18px; font-weight: bold;">${token}</p>
+       <p>Caso não tenha solicitado esse código, pode ignorar a presente mensagem com segurança. Outra pessoa pode ter digitado seu e-mail por engano.</p>
        <p>Se precisar de qualquer ajuda, nossa equipe está à disposição.</p>
-       <p>Atenciosamente,</p>
-       <p>Equipe Baú da Saúde</p>`
+       <p>Atenciosamente,<br>Equipe Baú da Saúde</p>`
     );
 
     res.json({ message: "Código de redefinição de senha enviado." });
@@ -61,6 +60,8 @@ router.post("/forgot-password", async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
+
 
 router.post("/reset-password/:token", async (req, res) => {
   const { token } = req.params;
