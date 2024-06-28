@@ -5,7 +5,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require("crypto");
 
-
 const User = require('../../models/user')
 const { sendEmail } = require('./../mailer');
 
@@ -41,7 +40,7 @@ router.post("/forgot-password", async (req, res) => {
     }
     const token = crypto.randomInt(1000, 9999).toString(); 
     user.resetPasswordToken = token;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
+    user.resetPasswordExpires = Date.now() + 3600000;
     await user.save();
 
     await sendEmail(
@@ -62,29 +61,6 @@ router.post("/forgot-password", async (req, res) => {
     res.json({ message: "Código de redefinição de senha enviado." });
   } catch (error) {
     res.status(400).json({ message: error.message });
-  }
-});
-
-router.get("/reset-password", async (req, res) => {
-  const { email, token } = req.body;
-
-  try {
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(400).send("Usuário não encontrado.");
-    }
-
-    const isTokenValid = token === user.resetPasswordToken;
-
-    if (!isTokenValid) {
-      return res.status(400).send("Token inválido.");
-    }
-
-    res.send("Token válido. A senha pode ser redefinida.");
-
-  } catch (error) {
-    res.status(400).send(error.message);
   }
 });
 
