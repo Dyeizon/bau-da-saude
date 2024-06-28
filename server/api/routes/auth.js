@@ -5,7 +5,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require("crypto");
 
-
 const User = require('../../models/user')
 const { sendEmail } = require('./../mailer');
 
@@ -41,17 +40,21 @@ router.post("/forgot-password", async (req, res) => {
     }
     const token = crypto.randomInt(1000, 9999).toString(); 
     user.resetPasswordToken = token;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
+    user.resetPasswordExpires = Date.now() + 3600000;
     await user.save();
 
     await sendEmail(
       email,
       "Redefinição de Senha",
+      `Olá ${user.name},
+       Recebemos uma solicitação para um código de recuperação de senha da sua conta.<br>Use o código abaixo para redefinir sua senha e continuar aproveitando os benefícios do Baú da Saúde: ${token}
+       Caso não tenha solicitado esse código, pode ignorar a presente mensagem com segurança. Outra pessoa pode ter digitado seu e-mail por engano.
+       Se precisar de qualquer ajuda, nossa equipe está à disposição.
+       Atenciosamente, Equipe Baú da Saúde`,
       `<p>Olá <strong>${user.name}</strong>,</p>
        <p>Recebemos uma solicitação para um código de recuperação de senha da sua conta.<br>Use o código abaixo para redefinir sua senha e continuar aproveitando os benefícios do <strong>Baú da Saúde</strong>:</p>
        <p style="font-size: 18px; font-weight: bold;">${token}</p>
-       <p>Caso não tenha solicitado esse código, pode ignorar a presente mensagem com segurança. Outra pessoa pode ter digitado seu e-mail por engano.</p>
-       <p>Se precisar de qualquer ajuda, nossa equipe está à disposição.</p>
+       <p>Caso não tenha solicitado esse código, pode ignorar a presente mensagem com segurança. Outra pessoa pode ter digitado seu e-mail por engano.<br>Se precisar de qualquer ajuda, nossa equipe está à disposição.</p>
        <p>Atenciosamente,<br>Equipe Baú da Saúde</p>`
     );
 
@@ -60,8 +63,6 @@ router.post("/forgot-password", async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-
-
 
 router.post("/reset-password/:token", async (req, res) => {
   const { token } = req.params;
@@ -106,6 +107,5 @@ router.get("/confirm/:token", async (req, res) => {
     res.status(400).send("Token inválido ou expirado.");
   }
 });
-
 
 module.exports = router;
