@@ -2,10 +2,45 @@ import { CSS } from "../utils";
 import { NewExamForm } from "./NewExamForm";
 import { ExamsList } from "./ExamsList";
 import { ExamItem } from "./ExamItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getTokenID } from "../utils";
+
+import { fetchUrl } from "../utils";
+
+interface Exam {
+    _id: string,
+    owner: string,
+    name: string,
+    date: Date,
+    type: {_id: string, name: string},
+    file: File | null,
+    results: { selectedName: string, resultValue: string, selectedMeasure: string }[]
+}
 
 export const MyExams: React.FC = () => {
     const [openAccordion, setOpenAccordion] = useState<boolean>(false);
+    const [exams, setExams] = useState<Exam[]>([]);
+
+    const fetchExams = async () => {
+        const response = await fetch(`${fetchUrl}/exams/${getTokenID(localStorage.getItem('token')?.split(' ')[1])}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${localStorage.getItem('token')?.split(' ')[1] ? `${localStorage.getItem('token')?.split(' ')[1]}`: ''}`,
+            },
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            setExams(data);
+        }
+    };  
+
+    useEffect(() => {
+        fetchExams();
+    }, []);
+
     return (
         <div>
             <div id="accordion-collapse" data-accordion="collapse">
@@ -18,19 +53,15 @@ export const MyExams: React.FC = () => {
                     </button>
                 </h2>
                 <div id="accordion-newexam-body" className={`transition-all transform ${openAccordion ? 'h-full' : 'hidden h-0'}`} aria-labelledby="accordion-newexam-header">
-                    <NewExamForm/>
+                    <NewExamForm onSubmit={fetchExams}/>
                 </div>
             </div>
 
             <ExamsList>
                 <>
-                    <ExamItem examId="123"/>
-                    <ExamItem examId="123"/>
-                    <ExamItem examId="123"/>
-                    <ExamItem examId="123"/>
-                    <ExamItem examId="123"/>
-                    <ExamItem examId="123"/>
-                    
+                    {exams.map(exam => (
+                        <ExamItem key={exam._id} info={exam}/>
+                    ))}
                 </>
             </ExamsList>
         </div>

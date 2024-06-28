@@ -1,7 +1,22 @@
 import { Modal, Button } from "flowbite-react";
 import { useState } from "react";
 
-export const ExamItem: React.FC<{examId: string}> = ({examId}) => {
+interface Exam {
+    _id: string,
+    owner: string,
+    name: string,
+    date: Date,
+    type: {_id: string, name: string},
+    file: File | null,
+    results: { selectedName: string, resultValue: string, selectedMeasure: string }[]
+}
+
+export const ExamItem: React.FC<{info: Exam}> = ({info}) => {
+    const date = new Date(info.date);
+    console.log(info);
+
+    const formattedDate = `${date.getDate() < 10 ? '0'+date.getDate() : date.getDate()}/${date.getMonth() < 10 ? '0'+(date.getMonth() + 1) : date.getMonth() + 1}/${date.getFullYear()}`;
+
     const [openModal, setOpenModal] = useState(false);
 
     const deleteExam = async (examId: string) => {
@@ -18,7 +33,7 @@ export const ExamItem: React.FC<{examId: string}> = ({examId}) => {
                     Você tem certeza que quer excluir esse exame?
                     </h3>
                     <div className="flex justify-center gap-4">
-                    <Button color="failure" onClick={() => {setOpenModal(false), deleteExam(examId)}}>
+                    <Button color="failure" onClick={() => {setOpenModal(false), deleteExam(info._id)}}>
                         {"Excluir"}
                     </Button>
                     <Button color="blue" onClick={() => setOpenModal(false)}>
@@ -30,13 +45,22 @@ export const ExamItem: React.FC<{examId: string}> = ({examId}) => {
             </Modal>
             
             <div className="text-center max-w-sm py-8 px-4 bg-white border border-gray-300 rounded-lg shadow-lg">
-                <h5 className="text-2xl font-bold tracking-tight text-gray-900">Exame de sangue</h5>
-                <h6 className="text-sm">09/06/2024</h6>
+                <h5 className="text-2xl font-bold tracking-tight text-gray-900">{info.type.name}</h5>
+                <h5 className="text-sm italic text-gray-900 h-6">{info.name && info.name}</h5>
+                <h6 className="text-sm">{formattedDate}</h6>
 
                 <div className="flex justify-center mt-6 gap-4">
-                    <a href={`/results/${examId}`} className="w-1/2 items-center px-5 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                    <a href={`/results/${info._id}`} className="w-1/2 items-center px-5 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
                         Resultados
                     </a>
+                    
+                    <div>
+                        <button type="button" disabled={info.file ? false : true} className={`${info.file ? '' : 'opacity-50 cursor-not-allowed'} text-white float-end bg-green-500 w-full focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2 px-4 text-center`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                            </svg>
+                        </button>
+                    </div>
 
                     <div>
                         <button type="button" onClick={() => setOpenModal(true)} className={`text-white float-end bg-red-500 w-full focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2 px-4 text-center`}>
@@ -45,6 +69,7 @@ export const ExamItem: React.FC<{examId: string}> = ({examId}) => {
                             </svg>
                         </button>
                     </div>
+
                 </div>
             </div>
         </>

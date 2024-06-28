@@ -4,18 +4,19 @@ const examsSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Types.ObjectId,
         required: true,
+        ref: 'User'
     },
     name: {
         type: String,
-        required: true,
     },
     date: {
         type: Date,
         required: true,
     },
     type: {
-        type: String,
+        type: mongoose.Types.ObjectId,
         required: true,
+        ref: 'ExamType'
     },
     results: [
         {

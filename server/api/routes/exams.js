@@ -14,8 +14,9 @@ const upload = multer({ storage });
 
 router.get('/:owner', authenticateToken, authorizeOwner, async (req, res) => {
     try {
-        const { owner } = req.params; 
-        const exams = await Exams.find({owner: owner});
+        const { owner } = req.params;
+
+        const exams = await Exams.find({owner: owner}).populate('type').sort({date: -1});
         res.status(200).json(exams);
     } catch (error) {
         res.status(400).send(error.message);
@@ -25,13 +26,8 @@ router.get('/:owner', authenticateToken, authorizeOwner, async (req, res) => {
 router.post('/', upload.single('examFile'), async (req, res) => {
     try {
         const { owner, examName, examDate, examType, results } = Object.assign({}, req.body);
-
-        console.log("Dados recebidos:", Object.assign({}, req.body));
         
-        console.log(req.file);
-        
-        if(req.file && req.file.size) res.status(400).send("Erro ao cadastrar exame: arquivo muito grande.")
-
+        if(req.file && req.file.size > 15000000) return res.status(400).send("Erro ao cadastrar exame: arquivo muito grande.")
 
         const exams = new Exams({ 
             owner, 
