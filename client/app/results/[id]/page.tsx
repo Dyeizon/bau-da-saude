@@ -27,7 +27,8 @@ const ExamPage = () => {
       const response = await axios.get(`${fetchUrl}/exams/${id}`, {
           headers: {
               Authorization: `${localStorage.getItem('token')}`
-          }
+          },
+          withCredentials:true
       });
 
       console.log(response.data);
@@ -50,7 +51,8 @@ const ExamPage = () => {
             responseType: 'blob',
             headers: {
                 Authorization: `${localStorage.getItem('token')}`
-            }
+            },
+            withCredentials: true
         });
 
         const blob = new Blob([response.data], { type: response.headers['content-type'] });

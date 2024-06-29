@@ -49,7 +49,7 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
   useEffect(() => {
     const fetchExamTypes = async () => {
       try {
-        const response = await axios.get<ExamType[]>(`${fetchUrl}/types`);
+        const response = await axios.get<ExamType[]>(`${fetchUrl}/types`, {withCredentials: true});
         setExamTypes(response.data);
       } catch (error) {
         console.error("Erro ao buscar os tipos de exame:", error);
@@ -58,7 +58,7 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
 
     const fetchResultTypes = async () => {
       try {
-        const response = await axios.get<ResultType[]>(`${fetchUrl}/result-types`);
+        const response = await axios.get<ResultType[]>(`${fetchUrl}/result-types`, {withCredentials: true});
         setResultTypes(response.data);
       } catch (error) {
         console.error("Erro ao buscar os tipos de resultado:", error);
@@ -127,7 +127,7 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
     formData.append('results', JSON.stringify(inputs));
   
     try {
-      const response = await axios.post(`${fetchUrl}/exams`, formData);
+      const response = await axios.post(`${fetchUrl}/exams`, formData, {withCredentials: true});
       if(response.status === 200) {
         resetFields();
       } else {

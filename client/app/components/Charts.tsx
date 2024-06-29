@@ -44,7 +44,7 @@ export const Charts: React.FC = () => {
 
     const fetchExamTypes = async () => {
         try {
-          const response = await axios.get<ExamType[]>(`${fetchUrl}/types`);
+          const response = await axios.get<ExamType[]>(`${fetchUrl}/types`, {withCredentials: true});
           setExamTypes(response.data);
         } catch (error) {
           console.error("Erro ao buscar os tipos de exame:", error);
