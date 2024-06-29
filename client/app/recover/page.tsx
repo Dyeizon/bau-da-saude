@@ -2,13 +2,11 @@
 
 import { fetchUrl } from "../utils";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import VerifyScreen from "./VerifyScreen";
 
 export default function Recover() {
   const [email, setEmail] = useState("");
   const [openVerifyCode, setOpenVerifyCode] = useState(false);
-  const router = useRouter();
 
   const handleRecover = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -27,7 +25,8 @@ export default function Recover() {
             const data = await response.json();
             console.log('Resposta recebida:', data);
             localStorage.setItem('token', data.token);
-            setOpenVerifyCode(true);  // Abre a tela de verificação
+            localStorage.setItem('email', email);
+            setOpenVerifyCode(true);
         } else {
             const errorData = await response.json();
             console.log('Erro na resposta:', errorData);

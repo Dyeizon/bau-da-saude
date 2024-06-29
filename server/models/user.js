@@ -20,12 +20,12 @@ const userSchema = new mongoose.Schema(
 
     resetPasswordToken: {
       type: String,
-      select: false,
+      select: true,
     },
     
     resetPasswordExpires: {
       type: Date,
-      select: false,
+      select: true,
     },
 
     birthDate: {
