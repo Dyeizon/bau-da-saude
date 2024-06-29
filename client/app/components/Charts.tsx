@@ -53,7 +53,7 @@ export const Charts: React.FC = () => {
 
     const fetchResultTypes = async () => {
         try {
-          const response = await axios.get<ResultType[]>(`${fetchUrl}/result-types`);
+          const response = await axios.get<ResultType[]>(`${fetchUrl}/result-types`, {withCredentials: true});
           setResultTypes(response.data);
         } catch (error) {
           console.error("Erro ao buscar os tipos de resultado:", error);
