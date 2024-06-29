@@ -50,10 +50,10 @@ export const ExamItem: React.FC<{info: Exam, onDelete: () => void}> = ({info, on
     
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${info.type.name}-${info.date}.pdf`;
+            a.download = `${info.type.name}-${formatDatePT(new Date(info.date))}.pdf`;
             document.body.appendChild(a);
             a.click();
-    
+            
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
         } catch (error) {

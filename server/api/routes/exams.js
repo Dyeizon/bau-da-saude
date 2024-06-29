@@ -49,7 +49,7 @@ router.get('/owner/:owner', authenticateToken, authorizeOwner, async (req, res) 
 
 router.get('/:id', async (req, res) => {
     try {
-        const exam = await Exams.findById(req.params.id).populate('type', 'name -_id').populate('owner', 'name -_id');
+        const exam = await Exams.findById(req.params.id).populate('type', 'name -_id').populate('owner', 'name birthDate -_id');
 
         res.status(200).json(exam);
     } catch (error) {

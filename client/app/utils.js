@@ -14,5 +14,18 @@ export function getTokenID(token) {
 
 export function formatDatePT(date) {
     return `${date.getDate() < 10 ? '0'+date.getDate() : date.getDate()}/${date.getMonth() < 9 ? '0'+(date.getMonth() + 1) : date.getMonth() + 1}/${date.getFullYear()}`;
+}
 
+export function calculateAge (birthDate, otherDate) {
+    birthDate = new Date(birthDate);
+    otherDate = new Date(otherDate);
+
+    var years = (otherDate.getFullYear() - birthDate.getFullYear());
+
+    if (otherDate.getMonth() < birthDate.getMonth() || 
+        otherDate.getMonth() == birthDate.getMonth() && otherDate.getDate() < birthDate.getDate()) {
+        years--;
+    }
+
+    return years;
 }
