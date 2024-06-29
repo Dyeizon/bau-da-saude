@@ -8,7 +8,6 @@ const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 const cors = require('cors');
-// app.use(cors({origin: 'http://localhost:3000'}));
 
 const cookieParser = require('cookie-parser');
 
@@ -17,7 +16,7 @@ const swaggerDocument = require("../api/swagger.json");
 
 const port = process.env.PORT || 3001;
 
-const allowedOrigins = ['*', 'http://localhost:3000', 'http://localhost:3001', 'https://baudasaude.vercel.app', 'https://baudasaude-api.vercel.app'];
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'https://baudasaude.vercel.app', 'https://baudasaude-api.vercel.app'];
 
 app.use(cors({
   origin: function (origin, callback) {
