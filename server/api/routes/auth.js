@@ -1,12 +1,14 @@
 const express = require('express')
-const router = express.Router()
+const router = express.Router();
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require("crypto");
 
-const User = require('../../models/user')
+const User = require('./../../models/user')
 const { sendEmail } = require('./../mailer');
+
+const validateOTP = require('./../middlewares/otp')
 
 router.post('/', async (req, res) => {
     try {
@@ -64,64 +66,42 @@ router.post("/forgot-password", async (req, res) => {
   }
 });
 
-router.get("/reset-password", async (req, res) => {
-  const { otp, email } = req.body;
-
+router.post("/verify-otp", validateOTP, async (req, res) => {
   try {
-      const { isValidOTP } = await validateOTP(email, otp);
-
-      if (!isValidOTP) {
-          return res.status(400).send("Token inválido ou expirado.");
-      }
-
-      res.send("OTP válido! Redefinir senha aqui...");
+    res.status(200).send("OTP válido!");
   } catch (error) {
-      console.log("Erro no servidor:", error.message);
+      console.error("Erro no servidor:", error.message);
       res.status(500).send(error.message);
   }
 });
 
-router.post("/reset-password", async (req, res) => {
-  const { otp, password, email } = req.body;
-
-  // Verificação de campos obrigatórios
-  if (!otp || !password || !email) {
-    return res.status(400).send("OTP, senha e email são obrigatórios.");
-  }
-
-  console.log(`OTP recebido: ${otp}`);
-  console.log(`Email recebido: ${email}`);
-  console.log(`Senha recebida: ${password}`);
-
+router.post("/reset-password", validateOTP, async (req, res) => {
+  const { token, email, password } = req.body;
+  console.log(token);
+  console.log(email);
+  console.log(password);
   try {
     const user = await User.findOne({
       email: email,
       resetPasswordExpires: { $gt: Date.now() },
     });
 
-    if (!user) {
-      console.log("Usuário não encontrado ou token expirado.");
-      return res.status(400).send("Token inválido ou expirado.");
-    }
+    // if (!user) {
+    //   console.log("Usuário não encontrado ou token expirado.");
+    //   return res.status(400).send("Token inválido ou expirado.");
+    // }
 
-    console.log(`Token armazenado no usuário: ${user.resetPasswordToken}`);
-
-    if (!user.resetPasswordToken) {
-      console.log("Token de redefinição de senha não encontrado.");
-      return res.status(400).send("Token inválido ou expirado.");
-    }
-
-    if (otp !== user.resetPasswordToken) {
-      console.log("OTP não corresponde ao token armazenado.");
-      return res.status(400).send("Token inválido ou expirado.");
-    }
+    // if (!user.resetPasswordToken) {
+    //   console.log("Token de redefinição de senha não encontrado.");
+    //   return res.status(400).send("Token inválido ou expirado.");
+    // }
 
     user.password = await bcrypt.hash(password, 10);
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
 
-    res.send("Senha redefinida com sucesso!");
+    res.status(200).send("Senha redefinida com sucesso!");
   } catch (error) {
     console.log("Erro no servidor:", error.message);
     res.status(500).send(error.message);

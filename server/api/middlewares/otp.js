@@ -1,7 +1,8 @@
-import User from '../models/User';
+const User = require('./../../models/user');
 
-export const validateOTP = async (req, res, next) => {
-    const { email, otp } = req.body;
+const validateOTP = async (req, res, next) => {
+    const { token, email } = req.body;
+    const otp = token;
 
     try {
         const user = await User.findOne({ email });
@@ -25,3 +26,5 @@ export const validateOTP = async (req, res, next) => {
         res.status(500).json({ message: 'Erro interno do servidor.' });
     }
 };
+
+module.exports = validateOTP;

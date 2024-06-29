@@ -1,25 +1,17 @@
-import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useRef } from "react";
 import { fetchUrl } from "../utils";
 import ResetPassword from "./ResetPassword";
 
 const numberOfDigits = 4;
 
-export default function VerifyScreen() {
+export default function VerifyScreen({ email }: { email: string }) {
     const [otp, setOtp] = useState<string[]>(new Array(numberOfDigits).fill(""));
-    const [email, setEmail] = useState("");
     const [otpError, setOtpError] = useState<string | null>(null);
     const [isResending, setIsResending] = useState(false);
     const [openResetPassword, setOpenResetPassword] = useState(false);
-    const otpBoxReference = useRef<(HTMLInputElement | null)[]>([]);
-    const router = useRouter();
+    const [token, setToken] = useState<string>("");
 
-    useEffect(() => {
-        const storedEmail = localStorage.getItem('email');
-        if (storedEmail) {
-          setEmail(storedEmail);
-        }
-    }, []);
+    const otpBoxReference = useRef<HTMLInputElement[]>([]);
 
     function handleChange(value: string, index: number) {
         const newArr = [...otp];
@@ -48,11 +40,11 @@ export default function VerifyScreen() {
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        const token = otp.join("");
+        setToken(otp.join(""));
 
         try {
-            const response = await fetch(`${fetchUrl}/auth/reset-password`, {
-                method: 'GET',
+            const response = await fetch(`${fetchUrl}/auth/verify-otp`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -102,7 +94,7 @@ export default function VerifyScreen() {
 
     return (
         <>
-            {!openResetPassword ? 
+            {!openResetPassword ? (
                 <>
                     <div className="flex flex-col items-center justify-center h-full">
                         <div className="text-center">
@@ -121,7 +113,7 @@ export default function VerifyScreen() {
                                     <input key={index} value={digit} maxLength={1}
                                         onChange={(e) => handleChange(e.target.value, index)}
                                         onKeyDown={(e) => handleBackspaceAndEnter(e, index)}
-                                        ref={(reference) => { otpBoxReference.current[index] = reference }}
+                                        ref={(reference) => { otpBoxReference.current[index] = reference as HTMLInputElement }}
                                         className={`border w-20 h-auto text-black p-3 rounded-md block bg-white focus:border-2 focus:outline-none appearance-none`}
                                     />
                                 ))}
@@ -145,10 +137,9 @@ export default function VerifyScreen() {
                         </form>
                     </div>
                 </>
-            : 
-            <ResetPassword/>
-        }
-    </>
+            ) : (
+                <ResetPassword email={email} token={token} />
+            )}
+        </>
     );
-    
 }

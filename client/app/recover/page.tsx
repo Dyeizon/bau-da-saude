@@ -87,7 +87,7 @@ export default function Recover() {
                     </form>
                   </>
                   : 
-                  <VerifyScreen/>
+                  <VerifyScreen email={email} />
                 }
                 
               </div>

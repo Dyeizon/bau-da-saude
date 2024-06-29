@@ -1,97 +1,96 @@
 import { useState } from "react";
-import { useRouter } from "next/router";
 import { fetchUrl } from "../utils";
+import { useNavigate } from "react-router-dom";
 
 interface ResetPasswordProps {
     email: string;
+    token: string;
 }
 
-const ResetPassword: React.FC<ResetPasswordProps> = ({ email }) => {
+export default function ResetPassword({ email, token }: ResetPasswordProps) {
+    const navigate = useNavigate();
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState<string | null>(null);
-    const router = useRouter();
+    const [passwordError, setPasswordError] = useState<string | null>(null);
+    const [isResetting, setIsResetting] = useState(false);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         if (password !== confirmPassword) {
-            setError("As senhas não coincidem.");
+            setPasswordError("As senhas não coincidem.");
             return;
         }
 
         try {
+            setIsResetting(true);
+
             const response = await fetch(`${fetchUrl}/auth/reset-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ token, email, password }),
                 credentials: 'include'
             });
-
+            
             if (response.ok) {
-                router.push('/login'); // Redireciona para a página de login após a redefinição de senha
+                console.log("Senha redefinida com sucesso!");
+                navigate("/login");
             } else {
                 const errorData = await response.json();
-                setError(errorData.message || "Ocorreu um erro ao redefinir a senha.");
+                setPasswordError(errorData.message || "Erro ao redefinir a senha.");
             }
         } catch (error) {
             console.error("Erro ao redefinir a senha:", error);
-            setError("Ocorreu um erro ao redefinir a senha.");
+            setPasswordError("Erro ao redefinir a senha. Por favor, tente novamente mais tarde.");
+        } finally {
+            setIsResetting(false);
         }
-    };
+    }
 
     return (
         <div className="flex flex-col items-center justify-center h-full">
             <div className="text-center">
+                <img className="mx-auto w-40" src="./bau.jpg" alt="logo" />
                 <h3 className="mb-8 mt-1 pb-1 text-lg font-semibold">
-                    Redefinição de Senha
+                    Redefinir Senha
                 </h3>
             </div>
             
             <form onSubmit={handleSubmit}>
-                <div className="mb-4">
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                        Nova Senha
-                    </label>
+                <div className="mb-4 w-full">
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">Nova Senha</label>
                     <input
                         id="password"
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
                         required
                     />
                 </div>
 
-                <div className="mb-4">
-                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                        Confirmar Nova Senha
-                    </label>
+                <div className="mb-4 w-full">
+                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirmar Nova Senha</label>
                     <input
                         id="confirmPassword"
                         type="password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
                         required
                     />
                 </div>
 
-                {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+                {passwordError && <p className="text-red-500 text-center mt-2">{passwordError}</p>}
 
-                <div className="flex items-center justify-center">
-                    <button
-                        type="submit"
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    >
-                        Redefinir Senha
+                <div className="flex flex-col space-y-5 mt-8">
+                    <button type="submit" className="flex items-center justify-center w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" style={{ background: 'color #40962f' }}>
+                        {isResetting ? "Redefinindo..." : "Redefinir Senha"}
                     </button>
                 </div>
             </form>
         </div>
     );
-};
-
-export default ResetPassword;
+}
