@@ -40,7 +40,8 @@ export default function VerifyScreen({ email }: { email: string }) {
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        setToken(otp.join(""));
+        const token = otp.join("");
+        setToken(token);
 
         try {
             const response = await fetch(`${fetchUrl}/auth/verify-otp`, {

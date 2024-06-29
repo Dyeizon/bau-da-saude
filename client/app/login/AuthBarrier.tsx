@@ -36,19 +36,19 @@ const AuthBarrier: React.FC<{children: ReactNode, reverse?: boolean}> = ({ child
             let token = localStorage.getItem('token');
             token = token ? token?.split(' ')[1] : null;
     
-            if(reverse) { // User is trying to access a login/register route 
-                if(await validateToken(token)) { // Blocks the authenticated user from accessing those routes
+            if(reverse) { 
+                if(await validateToken(token)) {
                     router.push('/') 
-                } else { // User is not authenticated, proceed to the page
+                } else {
                     setIsLoading(false)
                 }
     
-            } else { // User is trying to access an authenticated route
-                if(!token || (token && !await validateToken(token))) { // Blocks the unauthenticated user
+            } else {
+                if(!token || (token && !await validateToken(token))){
                     router.push('/login');
                 } 
                 
-                else { // User is authenticated, proceed to the page
+                else {
                     setIsLoading(false);                    
                 }
             }

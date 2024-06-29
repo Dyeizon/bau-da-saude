@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { fetchUrl } from "../utils";
-import { useNavigate } from "react-router-dom";
 
 interface ResetPasswordProps {
     email: string;
@@ -8,7 +7,6 @@ interface ResetPasswordProps {
 }
 
 export default function ResetPassword({ email, token }: ResetPasswordProps) {
-    const navigate = useNavigate();
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordError, setPasswordError] = useState<string | null>(null);
@@ -16,7 +14,7 @@ export default function ResetPassword({ email, token }: ResetPasswordProps) {
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-
+        
         if (password !== confirmPassword) {
             setPasswordError("As senhas não coincidem.");
             return;
@@ -36,7 +34,6 @@ export default function ResetPassword({ email, token }: ResetPasswordProps) {
             
             if (response.ok) {
                 console.log("Senha redefinida com sucesso!");
-                navigate("/login");
             } else {
                 const errorData = await response.json();
                 setPasswordError(errorData.message || "Erro ao redefinir a senha.");

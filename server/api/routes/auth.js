@@ -77,24 +77,22 @@ router.post("/verify-otp", validateOTP, async (req, res) => {
 
 router.post("/reset-password", validateOTP, async (req, res) => {
   const { token, email, password } = req.body;
-  console.log(token);
-  console.log(email);
-  console.log(password);
+
   try {
     const user = await User.findOne({
       email: email,
       resetPasswordExpires: { $gt: Date.now() },
     });
 
-    // if (!user) {
-    //   console.log("Usuário não encontrado ou token expirado.");
-    //   return res.status(400).send("Token inválido ou expirado.");
-    // }
+    if (!user) {
+      console.log("Usuário não encontrado ou token expirado.");
+      return res.status(400).send("Token inválido ou expirado.");
+    }
 
-    // if (!user.resetPasswordToken) {
-    //   console.log("Token de redefinição de senha não encontrado.");
-    //   return res.status(400).send("Token inválido ou expirado.");
-    // }
+    if (!user.resetPasswordToken) {
+      console.log("Token de redefinição de senha não encontrado.");
+      return res.status(400).send("Token inválido ou expirado.");
+    }
 
     user.password = await bcrypt.hash(password, 10);
     user.resetPasswordToken = undefined;
