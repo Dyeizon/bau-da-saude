@@ -25,7 +25,8 @@ export const ExamItem: React.FC<{info: Exam, onDelete: () => void}> = ({info, on
             await axios.delete(`${fetchUrl}/exams/${examId}`, {
                 headers: {
                     Authorization: `${localStorage.getItem('token')}`
-                }
+                },
+                withCredentials: true,
             });
 
             onDelete();
@@ -41,7 +42,8 @@ export const ExamItem: React.FC<{info: Exam, onDelete: () => void}> = ({info, on
                 responseType: 'blob',
                 headers: {
                     Authorization: `${localStorage.getItem('token')}`
-                }
+                },
+                withCredentials: true,
             });
 
             const blob = new Blob([response.data], { type: response.headers['content-type'] });
@@ -50,10 +52,10 @@ export const ExamItem: React.FC<{info: Exam, onDelete: () => void}> = ({info, on
     
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${info.type.name}-${info.date}.pdf`;
+            a.download = `${info.type.name}-${formatDatePT(new Date(info.date))}.pdf`;
             document.body.appendChild(a);
             a.click();
-    
+            
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
         } catch (error) {

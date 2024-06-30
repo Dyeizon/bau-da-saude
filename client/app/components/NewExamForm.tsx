@@ -30,7 +30,7 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
   const [examDate, setExamDate] = useState(new Date());
   const [examType, setExamType] = useState<string>("");
   const [examFile, setExamFile] = useState<File | null>(null);
-  const [inputs, setInputs] = useState<{ selectedName: string; resultValue: string; selectedMeasure: string }[]>([{ selectedName: "", resultValue: "", selectedMeasure: "" }]);
+  const [inputs, setInputs] = useState<{ selectedName: string; resultValue: string; selectedMeasure: string, resultId: string }[]>([{ selectedName: "", resultValue: "", selectedMeasure: "", resultId: "" }]);
   
   const [hasFileError, setHasFileError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -49,7 +49,7 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
   useEffect(() => {
     const fetchExamTypes = async () => {
       try {
-        const response = await axios.get<ExamType[]>(`${fetchUrl}/types`);
+        const response = await axios.get<ExamType[]>(`${fetchUrl}/types`, {withCredentials: true});
         setExamTypes(response.data);
       } catch (error) {
         console.error("Erro ao buscar os tipos de exame:", error);
@@ -58,7 +58,7 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
 
     const fetchResultTypes = async () => {
       try {
-        const response = await axios.get<ResultType[]>(`${fetchUrl}/result-types`);
+        const response = await axios.get<ResultType[]>(`${fetchUrl}/result-types`, {withCredentials: true});
         setResultTypes(response.data);
       } catch (error) {
         console.error("Erro ao buscar os tipos de resultado:", error);
@@ -92,17 +92,18 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
       const resultTypeIds = selectedExam.resultTypeIds.map(String);
       const availableResults = resultTypes.filter((result) => resultTypeIds.includes(result._id));
       setFilteredResultTypes(availableResults);
-      setInputs([{ selectedName: "", resultValue: "", selectedMeasure: "" }]);
+      setInputs([{ selectedName: "", resultValue: "", selectedMeasure: "", resultId: "" }]);
       setShowResultSection(true);
     } else {
       setFilteredResultTypes([]);
-      setInputs([{ selectedName: "", resultValue: "", selectedMeasure: "" }]);
+      setInputs([{ selectedName: "", resultValue: "", selectedMeasure: "", resultId: "" }]);
       setShowResultSection(false);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(inputs)
     setIsLoading(true);
   
     // Verifica se todos os campos obrigatórios estão preenchidos
@@ -127,7 +128,7 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
     formData.append('results', JSON.stringify(inputs));
   
     try {
-      const response = await axios.post(`${fetchUrl}/exams`, formData);
+      const response = await axios.post(`${fetchUrl}/exams`, formData, {withCredentials: true});
       if(response.status === 200) {
         resetFields();
       } else {
@@ -142,7 +143,7 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
   };  
 
   const addNewInputSet = () => {
-    setInputs([...inputs, { selectedName: "", resultValue: "", selectedMeasure: "" }]);
+    setInputs([...inputs, { selectedName: "", resultValue: "", selectedMeasure: "", resultId: "" }]);
   };
 
   const handleDelete = (index: number) => {
@@ -206,7 +207,6 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
           </div>
         </fieldset>
 
-              
       <label htmlFor="exam_file">Enviar um arquivo</label>
       <input onChange={(e) => handleFileChange(e)} name="examFile" accept=".pdf" className={`${hasFileError ? 'bg-red-300' : ''} mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50`} id="exam_file" type="file"/>
       <p className={`${hasFileError ? 'text-red-700 font-bold' : ''} mt-1 mb-5 text-sm text-gray-500`} id="exam_file_help">Apenas PDF com tamanho máximo de 12MB</p>
@@ -226,12 +226,15 @@ export const NewExamForm: React.FC<{onSubmit: () => void}> = ({ onSubmit }) => {
                       onChange={(event) => {
                         const newInputs = [...inputs];
                         const selectedResult = filteredResultTypes.find(result => result.name === event.target.value);
+                        console.log(selectedResult);
                         if (selectedResult) {
                           newInputs[index].selectedName = selectedResult.name;
                           newInputs[index].selectedMeasure = selectedResult.measure;
+                          newInputs[index].resultId = selectedResult._id;
                         } else {
                           newInputs[index].selectedName = "";
                           newInputs[index].selectedMeasure = "";
+                          newInputs[index].resultId = "";
                         }
                         setInputs(newInputs);
                       }}

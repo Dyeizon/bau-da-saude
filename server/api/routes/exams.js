@@ -49,7 +49,7 @@ router.get('/owner/:owner', authenticateToken, authorizeOwner, async (req, res) 
 
 router.get('/:id', async (req, res) => {
     try {
-        const exam = await Exams.findById(req.params.id).populate('type', 'name -_id').populate('owner', 'name -_id');
+        const exam = await Exams.findById(req.params.id).populate('type', 'name -_id').populate('owner', 'name birthDate -_id');
 
         res.status(200).json(exam);
     } catch (error) {
@@ -90,6 +90,68 @@ router.get('/download/:id', async (req, res) => {
     } catch (error) {
         console.error('Error downloading file:', error);
         res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+router.get('/data/select', authenticateToken, async (req, res) => {
+    try {
+        const owner = req.query.owner;
+        const examType = req.query.examType;
+        const resultType = req.query.resultType;
+        const startDate = req.query.startDate;
+        const endDate = req.query.endDate;
+
+        if(!owner || !examType || !resultType) {
+            return res.status(404).json({ error: 'Insuficcient query.' });
+        }
+
+        var exams;
+        
+        if(startDate && endDate) {
+            exams = await Exams.find({
+                owner: owner,
+                type: examType,
+                'results.resultId': resultType,
+                date: {
+                    $gte: new Date(startDate),
+                    $lte: new Date(endDate)
+                }
+            }, {
+                date: 1,
+                'results.resultValue': 1,
+                'results.selectedMeasure': 1,
+                _id: 0
+            }).sort({ date: 1 });
+        } else {
+            exams = await Exams.find({
+                owner: owner,
+                type: examType,
+                'results.resultId': resultType
+              }, {
+                date: 1, 
+                'results.resultValue': 1, 
+                'results.selectedMeasure': 1, 
+                _id: 0
+            }).sort({ date: 1 });
+        }
+
+        if(exams.length <= 0) {
+            return res.status(403).json({error: 'No exams matching this criteria were found.'})
+        }
+
+        const destructuredExams = exams.flatMap(({ date, results }) => 
+            results.map(result => ({
+            resultValue: parseFloat(result.resultValue),
+            date
+            }))
+        );
+
+        console.log(destructuredExams);
+
+        res.status(200).send({results: destructuredExams, measure: exams[0].results[0].selectedMeasure}); 
+    } catch (error) {
+        console.error('Error selecting exams:', error);
+        res.status(400).json({ error: 'Error selecting exams' });
     }
 });
   
