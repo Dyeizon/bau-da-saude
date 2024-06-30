@@ -7,7 +7,7 @@ import AuthBarrier from "../login/AuthBarrier";
 import { fetchUrl } from "../utils";
 
 export default function Register() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isRegistering, setIsRegistering] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [dataNasc, setDataNasc] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -101,7 +101,7 @@ export default function Register() {
             throw new Error("Erro ao verificar o email.");
           }
 
-          setIsLoading(true);
+          setIsRegistering(true);
 
           const birthDate = stringToDate(dataNasc);
           const requestBody = JSON.stringify({
@@ -129,11 +129,10 @@ export default function Register() {
           }
         } catch (error) {
           console.log("Erro no cadastro:", error);
-          alert("Erro no cadastro");
         }
       })();
     }
-    setIsLoading(false);
+    setIsRegistering(false);
   };
 
 
@@ -268,14 +267,14 @@ export default function Register() {
 
                         <div className="mb-6 pb-1 pt-1 text-center">
                           <button
-                            className={`mb-3 inline-block w-full rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-dark-3 transition duration-150 ease-in-out hover:shadow-dark-2 focus:shadow-dark-2 focus:outline-none focus:ring-0 active:shadow-dark-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                            disabled={isLoading}
+                            className={`mb-3 inline-block w-full rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-dark-3 transition duration-150 ease-in-out hover:shadow-dark-2 focus:shadow-dark-2 focus:outline-none focus:ring-0 active:shadow-dark-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong ${isRegistering ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            disabled={isRegistering}
                             type="submit"
                             data-twe-ripple-init
                             data-twe-ripple-color="light"
                             style={{background: 'linear-gradient(to right, #a6f696, #40962f, #40962f, #a6f696)'}}
                           >
-                            {isLoading ? (
+                            {isRegistering ? (
                               <>
                                 <svg aria-hidden="true" className="inline w-4 h-4 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-green-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
