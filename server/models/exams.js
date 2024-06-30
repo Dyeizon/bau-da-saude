@@ -22,7 +22,12 @@ const examsSchema = new mongoose.Schema({
         {
             selectedName: String,
             resultValue: String,
-            selectedMeasure: String
+            selectedMeasure: String,
+            resultId: {
+                type: mongoose.Types.ObjectId,
+                required: true,
+                ref: 'ResultType'
+            }
         }
     ],
 
