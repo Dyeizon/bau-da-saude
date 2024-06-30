@@ -49,9 +49,8 @@ export default function Login() {
         } catch (error) {
             console.error('Erro ao fazer login:', error);
             setEmailError('Erro ao fazer login');
-        } finally {
-            setIsLoading(false);
         }
+        setIsLoading(false);
     };
 
     return (

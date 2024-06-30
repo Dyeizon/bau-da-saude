@@ -21,6 +21,23 @@ router.get('/', authenticateToken, async (req, res) => {
     }
 });
 
+router.get('/:email', async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (user) {
+      res.status(200).json({ exists: true });
+    } else {
+      res.status(200).json({ exists: false });
+    }
+  } catch (error) {
+    console.error('Erro ao verificar o usuário:', error);
+    res.status(500).json({ error: 'Erro ao verificar o usuário' });
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const { name, email, password, birthDate } = req.body;
