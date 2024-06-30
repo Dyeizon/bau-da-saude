@@ -84,34 +84,38 @@ export default function ResetPassword({ email, token }: ResetPasswordProps) {
                 </h3>
             </div>
             
-            <form onSubmit={handleSubmit}>
-                <div className="mb-6">
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                    Nova Senha
-                    </label>
+            <form onSubmit={handleSubmit} className="">
+                <div className="relative mb-4 mt-4" data-twe-input-wrapper-init>
                     <input
-                    id="password"
                     type="password"
+                    className={`peer block min-h-[auto] w-full rounded ${passwordError || confirmPasswordError ? 'border-red-500' : 'border-0'} bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none focus:outline-none focus:ring-0 transition-all duration-200 ease-linear ${password ? 'focus:placeholder:opacity-100 peer-focus:text-primary' : ''} dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary`}
+                    id="password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-                    required
+                    onChange={e => setPassword(e.target.value)}
                     />
+                    <label
+                    htmlFor="password"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] transition-all duration-200 ease-out ${passwordError || confirmPasswordError ? 'text-red-500' : 'text-neutral-400'} ${password ? '-translate-y-[1rem] scale-[0.8] text-primary  bg-white rounded px-0.5' : 'peer-focus:-translate-y-[1rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-focus:bg-white px-0.5 peer-focus:rounded'} peer-data-[twe-input-state-active]:-translate-y-[1rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
+                    >
+                        Nova senha
+                    </label>
                     {passwordError && <p className="text-red-500 text-xs">{passwordError}</p>}
                 </div>
 
-                <div className="mb-6">
-                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                    Confirmar Nova Senha
-                    </label>
+                <div className="relative mb-4 mt-6" data-twe-input-wrapper-init>
                     <input
-                    id="confirmPassword"
                     type="password"
+                    className={`peer block min-h-[auto] w-full rounded ${confirmPasswordError ? 'border-red-500' : 'border-0'} bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none focus:outline-none focus:ring-0 transition-all duration-200 ease-linear ${confirmPassword ? 'focus:placeholder:opacity-100 peer-focus:text-primary' : ''} dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary`}
+                    id="confirmPassword"
                     value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-                    required
+                    onChange={e => setConfirmPassword(e.target.value)}
                     />
+                    <label
+                    htmlFor="password"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] transition-all duration-200 ease-out ${confirmPasswordError ? 'text-red-500' : 'text-neutral-400'} ${confirmPassword ? '-translate-y-[1rem] scale-[0.8] text-primary  bg-white rounded px-0.5' : 'peer-focus:-translate-y-[1rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-focus:bg-white px-0.5 peer-focus:rounded'} peer-data-[twe-input-state-active]:-translate-y-[1rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary`}
+                    >
+                        Confirmar nova senha
+                    </label>
                     {confirmPasswordError && <p className="text-red-500 text-xs">{confirmPasswordError}</p>}
                 </div>
                 
