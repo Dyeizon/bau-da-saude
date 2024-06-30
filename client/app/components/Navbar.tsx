@@ -97,10 +97,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
                   </div>
                 </div>
               </div>
-              {localStorage.getItem('name') && (
-                <span className='text-white text-sm tracking-wider'>Olá, {localStorage.getItem('name')}!</span>
-              )}
+              
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+              {localStorage.getItem('name') && (
+                <span className='hidden md:block text-white text-sm tracking-wider mr-4'>Olá, {localStorage.getItem('name')}!</span>
+              )}
+
                 <button
                   type="button"
                   className="relative rounded-full bg-white p-1 text-gray-400 hover:text-black focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -137,6 +139,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <MenuItem>
+
+                        <span className={'block px-4 py-2 text-sm text-gray-700 w-full text-left font-bold'}>
+                          {localStorage.getItem('name')}
+                        </span>
+
+                      </MenuItem>
+                      
                       <MenuItem>
                         {({ focus }) => (
                           <DisclosureButton

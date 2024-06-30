@@ -41,7 +41,8 @@ export const ExamItem: React.FC<{info: Exam, onDelete: () => void}> = ({info, on
                 responseType: 'blob',
                 headers: {
                     Authorization: `${localStorage.getItem('token')}`
-                }
+                },
+                withCredentials: true,
             });
 
             const blob = new Blob([response.data], { type: response.headers['content-type'] });
