@@ -25,7 +25,8 @@ export const ExamItem: React.FC<{info: Exam, onDelete: () => void}> = ({info, on
             await axios.delete(`${fetchUrl}/exams/${examId}`, {
                 headers: {
                     Authorization: `${localStorage.getItem('token')}`
-                }
+                },
+                withCredentials: true,
             });
 
             onDelete();
