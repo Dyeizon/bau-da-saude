@@ -49,7 +49,7 @@ router.post("/forgot-password", async (req, res) => {
       email,
       "Redefinição de Senha",
       `Olá ${user.name},
-       Recebemos uma solicitação para um código de recuperação de senha da sua conta.<br>Use o código abaixo para redefinir sua senha e continuar aproveitando os benefícios do Baú da Saúde: ${token}
+       Recebemos uma solicitação para um código de recuperação de senha da sua conta. Use o código abaixo para redefinir sua senha e continuar aproveitando os benefícios do Baú da Saúde: ${token}
        Caso não tenha solicitado esse código, pode ignorar a presente mensagem com segurança. Outra pessoa pode ter digitado seu e-mail por engano.
        Se precisar de qualquer ajuda, nossa equipe está à disposição.
        Atenciosamente, Equipe Baú da Saúde`,

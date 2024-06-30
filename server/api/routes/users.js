@@ -38,6 +38,59 @@ router.get('/:email', async (req, res) => {
   }
 });
 
+router.get('/dates/:id', authenticateToken, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findOne({ _id: id });
+
+    if (user) {
+      res.status(200).json({ 
+        exists: true,
+        createdAt: user.createdAt,
+        notificatedAt: user.notificatedAt,
+        email: user.email
+      });
+    }
+    else{
+      res.status(404).send("Usuário não encontrado");
+    }
+
+  } catch (error) {
+    console.error('Erro ao verificar o usuário:', error);
+    res.status(500).json({ error: 'Erro ao verificar o usuário' });
+  }
+});
+
+router.post("/notificate", async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Usuário não encontrado." });
+    }
+    
+    user.notificatedAt = Date.now();
+    await user.save();
+
+    await sendEmail(
+      email,
+      "Lembrete de realização de exames",
+      `Olá ${user.name},
+       A equipe Baú da Saúde vem por meio deste e-mail notificá-lo que faz mais de 6 meses da data de realização do seu último exame.
+       É muito importante para sua saúde que você realize exames periodicamente, já está na hora de retornar ao médico!
+       Atenciosamente, Equipe Baú da Saúde`,
+      `<p>Olá <strong>${user.name}</strong>,</p>
+       <p>A equipe Baú da Saúde vem por meio deste e-mail notificá-lo que faz mais de 6 meses da data de realização do seu último exame.<br>É muito importante para sua saúde que você realize exames periodicamente, <b>já está na hora de retornar ao médico</b>!</p>
+       <p>Atenciosamente,<br>Equipe Baú da Saúde</p>`
+    );
+
+    res.json({ message: "Notificação enviada." });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const { name, email, password, birthDate } = req.body;

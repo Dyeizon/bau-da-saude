@@ -32,6 +32,11 @@ const userSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+
+    notificatedAt: {
+      type: Date,
+      select: true,
+    },
   },
   { timestamps: true }
 );

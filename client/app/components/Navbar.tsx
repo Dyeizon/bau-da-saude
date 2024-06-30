@@ -102,17 +102,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
               {localStorage.getItem('name') && (
                 <span className='hidden md:block text-white text-sm tracking-wider mr-4'>Olá, {localStorage.getItem('name')}!</span>
               )}
-
-                <button
-                  type="button"
-                  className="relative rounded-full bg-white p-1 text-gray-400 hover:text-black focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                >
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">Ver notificações</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
-
-                {/* Profile dropdown */}
+              
                 <Menu as="div" className="relative ml-3">
                   <div>
                     <MenuButton className={`relative flex rounded-full bg-white ${!profileImg ? 'p-2' : ''} text-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800`}>
