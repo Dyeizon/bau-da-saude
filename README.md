@@ -25,6 +25,15 @@ Palavras-chave: digitalização, armazenamento, exames médicos, saúde, gestão
 - **Deploy**: Vercel
 - **Gestão de Projeto**: MeisterTask
 
+## Links Importantes (Consulte a pasta de arquivos: "Imagens da gestão do projeto")
+- [**Diagrama de Caso de Uso**](https://lucid.app/lucidchart/ad0466d5-d30f-489c-820f-fbb69b6a885c/edit?viewport_loc=5639%2C6886%2C2315%2C1085%2C0_0&invitationId=inv_0dafc75c-6b58-416b-840c-0f2ac0960d43) (necessita conta no site)
+- [**Histórias de Usuário**](https://miro.com/app/board/uXjVKVb0nFw=/)
+- [**Diagrama de Classe**](https://lucid.app/lucidchart/b1fea5a5-def3-48c1-9742-0267f80c804d/edit?viewport_loc=-554%2C258%2C2560%2C1200%2C0_0&invitationId=inv_05e1470a-9b0c-416d-ae30-cab081a2c079) (necessita conta no site)
+- [**Protótipo**](https://www.figma.com/design/GAtMngmnfS8eUe2BEDv9Tb/Login-Page-(Community)?node-id=0-1)
+- [**MeisterTask**](https://www.meistertask.com/app/project/4mDmi0Id/grupo-6) (necessita conta no site e fazer parte do grupo)
+- [**Matriz de Rastreabilidade**](https://docs.google.com/spreadsheets/d/1o_zBe1Kd7Ux4CLe2HRmp2RTIKbx64xcHH6IxW3t7aWQ/edit?usp=sharing)
+- [**Regras de Negócio**](https://docs.google.com/document/d/1I4BzvB4N1t3pjmgDX4i3RDpHK-rxKw1onRY91UR2HSs/edit?usp=sharing)
+
 ## Conclusão
 
 O projeto Baú da Saúde representa um passo importante na gestão de informações médicas pessoais, usufruindo da tecnologia para oferecer uma solução eficaz e segura. Ao centralizar e organizar os resultados de várias categorias de exames, a aplicação, além de facilitar o acesso dos usuários às suas informações de saúde, também reduz o risco de perda de dados importantes, como pode ocorrer ao armazenar exames impressos. Com isso, pode-se concluir que esse projeto contribui para uma gestão de saúde mais fácil e eficiente.
