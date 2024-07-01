@@ -68,6 +68,126 @@
         }
       }
     },
+    "/users/{email}": {
+      "get": {
+        "summary": "Verificar se o usuário existe",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Email do usuário"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "exists": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      }
+    },
+    "/users/dates/{id}": {
+      "get": {
+        "summary": "Obter datas importantes do usuário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do usuário"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Datas importantes do usuário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "exists": {
+                      "type": "boolean"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "notificatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "email": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      }
+    },
+    "/users/notificate": {
+      "post": {
+        "summary": "Notificar usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Notificação enviada"
+          },
+          "400": {
+            "description": "Usuário não encontrado"
+          }
+        }
+      }
+    },
+
     "/auth": {
       "post": {
         "summary": "Login de um usuário",
@@ -171,8 +291,8 @@
           }
         }
       }
-    },
-    "/types": {
+},
+ "/types": {
       "get": {
         "summary": "Listar todos os tipos de exames",
         "security": [
@@ -507,6 +627,7 @@
         },
         "required": ["name", "email", "password", "birthDate"]
       },
+      
       "auth": {
         "type": "object",
         "properties": {
