@@ -25,7 +25,7 @@ Palavras-chave: digitalização, armazenamento, exames médicos, saúde, gestão
 - **Deploy**: Vercel
 - **Gestão de Projeto**: MeisterTask
 
-## Links Importantes
+## Links Importantes (Consulte a pasta de arquivos: "Imagens da gestão do projeto")
 - [**Diagrama de Caso de Uso**](https://lucid.app/lucidchart/ad0466d5-d30f-489c-820f-fbb69b6a885c/edit?viewport_loc=5639%2C6886%2C2315%2C1085%2C0_0&invitationId=inv_0dafc75c-6b58-416b-840c-0f2ac0960d43) (necessita conta no site)
 - [**Histórias de Usuário**](https://miro.com/app/board/uXjVKVb0nFw=/)
 - [**Diagrama de Classe**](https://lucid.app/lucidchart/b1fea5a5-def3-48c1-9742-0267f80c804d/edit?viewport_loc=-554%2C258%2C2560%2C1200%2C0_0&invitationId=inv_05e1470a-9b0c-416d-ae30-cab081a2c079) (necessita conta no site)
