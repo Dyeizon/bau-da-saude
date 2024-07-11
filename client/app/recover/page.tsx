@@ -42,7 +42,7 @@ export default function Recover() {
   };
 
   return (
-    <section className="h-screen w-screen" style={{backgroundImage: 'url("/bau_background.png")', backgroundSize: 'cover'}}>
+    <section className="h-screen w-screen" style={{backgroundImage: 'url("/bau_background.webp")', backgroundSize: 'cover'}}>
       <div className="flex h-full flex-wrap items-center justify-center text-neutral-800 dark:text-neutral-200">
         <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-lg w-11/12 h-3/4 flex justify-center sm:w-3/4 lg:w-6/12 md:w-3/4 xl:w-5/12">
           <div className="flex">
@@ -51,7 +51,7 @@ export default function Recover() {
                 {!openVerifyCode ? 
                   <>
                     <div className="text-center">
-                      <img className="mx-auto w-40" src="./bau.jpg" alt="logo" />
+                      <img className="mx-auto w-40" src="./bau.webp" alt="logo" />
                       <h3 className="mb-8 mt-1 pb-1 text-lg font-semibold">
                         Esqueceu sua senha?
                       </h3>

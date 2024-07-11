@@ -64,7 +64,7 @@ export default function Login() {
                                     <div className="m-auto px-4 md:px-0 lg:w-6/12">
                                         <div className="md:mx-6 md:p-12">
                                             <div className="text-center">
-                                                <img className="mx-auto w-48" src="./bau.jpg" alt="logo" />
+                                                <img className="mx-auto w-48" src="./bau.webp" alt="logo" />
                                                 <h2 className="mt-1 pb-1 text-xl font-semibold">Baú da Saúde</h2>
                                                 <h3 className="mb-8 mt-1 pb-1 text-xl font-semibold">Sua saúde bem guardada!</h3>
                                             </div>
@@ -147,7 +147,7 @@ export default function Login() {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center lg:w-6/12" style={{ backgroundImage: 'url("/bau_login.jpg")', backgroundSize: 'cover' }}>
+                                    <div className="flex items-center lg:w-6/12" style={{ backgroundImage: 'url("/bau_login.webp")', backgroundSize: 'cover' }}>
                                     </div>
                                 </div>
                             </div>

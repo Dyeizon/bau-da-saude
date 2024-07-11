@@ -76,7 +76,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onData }) => {
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
                   <a href="/">
-                    <Image src='/bau.jpg' alt='Logo' className='h-10 w-auto' width={256} height={256}/>
+                    <Image src='/bau.webp' alt='Logo' className='h-10 w-auto' width={256} height={256}/>
                   </a>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">

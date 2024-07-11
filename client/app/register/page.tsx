@@ -171,11 +171,11 @@ export default function Register() {
             <div className="w-full">
               <div className="block bg-white dark:bg-neutral-800">
                 <div className="h-screen g-0 lg:flex lg:flex-wrap">
-                  <div className="flex items-center lg:w-6/12" style={{backgroundImage: 'url("/bau_register.jpg")', backgroundSize: 'cover'}}></div>
+                  <div className="flex items-center lg:w-6/12" style={{backgroundImage: 'url("/bau_register.webp")', backgroundSize: 'cover'}}></div>
                   <div className="m-auto px-4 md:px-0 lg:w-6/12">
                     <div className="md:mx-6 md:p-6">
                       <div className="text-center">
-                        <img className="mx-auto w-36" src="./bau.jpg" alt="logo" />
+                        <img className="mx-auto w-36" src="./bau.webp" alt="logo" />
                         <h4 className="mb-6 mt-1 pb-1 text-xl font-semibold">
                           Baú da Saúde
                         </h4>

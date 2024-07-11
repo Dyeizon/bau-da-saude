@@ -103,7 +103,7 @@ export default function VerifyScreen({ email }: { email: string }) {
                 <>
                     <div className="flex flex-col items-center justify-center h-full">
                         <div className="text-center">
-                            <img className="mx-auto w-40" src="./bau.jpg" alt="logo" />
+                            <img className="mx-auto w-40" src="./bau.webp" alt="logo" />
                             <h3 className="mb-8 mt-1 pb-1 text-lg font-semibold">
                                 Código enviado!
                             </h3>
